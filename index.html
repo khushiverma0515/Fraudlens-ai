@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FraudLens AI — Fraud Intelligence</title>
+
 <style>
 :root {
   --cream: #F5EFC6;
@@ -16,16 +16,21 @@
   --muted: #89786A;
   --border: rgba(74,46,39,.14);
 }
+
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: var(--cream);
   color: var(--brown);
   font-family: "Segoe UI", Arial, sans-serif;
 }
+
 button, input, select { font: inherit; }
 button { cursor: pointer; }
+
 .app { display: flex; min-height: 100vh; }
+
 .sidebar {
   width: 245px;
   flex-shrink: 0;
@@ -35,19 +40,22 @@ button { cursor: pointer; }
   display: flex;
   flex-direction: column;
 }
+
 .brand {
-  font-family: Georgia, serif;
-  font-size: 29px;
+  font: 29px Georgia, serif;
   letter-spacing: -1px;
   margin: 0 0 5px 7px;
 }
+
 .tagline {
   font-size: 10px;
   letter-spacing: 3px;
   margin: 7px 7px 38px;
   color: var(--blue);
 }
+
 .nav { display: grid; gap: 7px; }
+
 .nav button {
   text-align: left;
   border: 0;
@@ -57,20 +65,30 @@ button { cursor: pointer; }
   color: #E7DACB;
   transition: .2s;
 }
+
 .nav button:hover, .nav button.active {
   background: var(--soil);
   color: var(--cream);
 }
-.nav button span { display: inline-block; width: 28px; }
+
+.nav button span {
+  display: inline-block;
+  width: 28px;
+}
+
 .side-bottom {
   margin-top: auto;
   padding: 25px 7px 0;
   color: var(--blue);
-  font-family: Georgia, serif;
-  font-style: italic;
-  line-height: 1.6;
+  font: italic 16px/1.6 Georgia, serif;
 }
-main { flex: 1; min-width: 0; padding: 29px 34px 40px; }
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 29px 34px 40px;
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -78,13 +96,16 @@ main { flex: 1; min-width: 0; padding: 29px 34px 40px; }
   gap: 15px;
   margin-bottom: 27px;
 }
+
 .eyebrow {
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--soil);
   text-transform: uppercase;
 }
+
 .profile { font-size: 13px; color: var(--soil); }
+
 .hero {
   display: grid;
   grid-template-columns: 1.5fr .8fr;
@@ -92,54 +113,86 @@ main { flex: 1; min-width: 0; padding: 29px 34px 40px; }
   align-items: center;
   margin-bottom: 28px;
 }
+
 h1 {
   font: 56px/1.05 Georgia, serif;
   letter-spacing: -2px;
   margin: 10px 0;
 }
-.hero p { color: var(--soil); line-height: 1.7; max-width: 520px; }
+
+.hero p {
+  color: var(--soil);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
 .quote {
   border-left: 2px solid var(--red);
   padding: 12px 18px;
   color: var(--soil);
   font: italic 19px/1.5 Georgia, serif;
 }
+
 .panel, .stat {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px;
   min-width: 0;
 }
+
 .panel { background: rgba(255,253,244,.48); }
+
 .stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0,1fr));
   gap: 14px;
   margin-bottom: 20px;
 }
+
 .stat { background: var(--white); }
 .stat:nth-child(1) { background: #F0E5B9; }
 .stat:nth-child(2) { background: var(--blue); }
 .stat:nth-child(3) { background: #CBB09D; }
 .stat:nth-child(4) { background: var(--soil); color: var(--cream); }
+
 .stat-label { font-size: 12px; line-height: 1.5; }
 .stat-number { font: 31px Georgia, serif; margin: 15px 0 8px; }
 .stat-note { font-size: 11px; opacity: .78; }
+
 .dashboard {
   display: grid;
   grid-template-columns: 1.55fr 1fr;
   gap: 18px;
   align-items: start;
 }
+
 h2 { font: 24px Georgia, serif; margin: 0 0 18px; }
 h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
+
 .chart-panel { min-height: 300px; }
 .chart { width: 100%; height: auto; display: block; }
-.legend { display: flex; gap: 18px; font-size: 12px; margin-top: 12px; }
-.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
 .red-dot { background: var(--red); }
 .blue-dot { background: #7198C0; }
+
 .right-column { display: grid; gap: 18px; }
+
 .alert {
   display: flex;
   justify-content: space-between;
@@ -148,18 +201,30 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
   padding: 13px 0;
   border-bottom: 1px solid var(--border);
 }
+
 .alert:last-child { border-bottom: 0; }
 .alert strong { font-size: 13px; font-weight: 600; }
-.alert small { display: block; color: var(--muted); margin-top: 5px; }
+
+.alert small {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
 .pill {
   background: #E9CFCA;
   color: var(--red);
   border-radius: 20px;
   padding: 5px 9px;
   font-size: 10px;
+  white-space: nowrap;
 }
+
 .pill.safe { background: #D9E6F1; color: #294B70; }
+
 .actions { display: grid; gap: 9px; }
+
 .btn {
   border-radius: 8px;
   border: 1px solid var(--red);
@@ -168,9 +233,13 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
   color: var(--red);
   text-align: left;
 }
+
 .btn.primary { background: var(--red); color: var(--white); }
 .btn.blue { background: var(--blue); border-color: var(--blue); color: var(--brown); }
 .btn:hover { filter: brightness(.96); }
+
+.btn:disabled { opacity: .6; cursor: wait; }
+
 .investigator {
   margin-top: 18px;
   background: var(--blue);
@@ -181,14 +250,19 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
   align-items: center;
   gap: 20px;
 }
+
 .investigator h2 { margin-bottom: 8px; }
 .investigator p { font-size: 13px; line-height: 1.6; margin: 0; }
 .investigator .btn { min-width: 160px; }
+
 .view { display: none; }
 .view.active { display: block; }
+
 .form-panel { max-width: 760px; }
+
 .field { display: grid; gap: 7px; margin: 16px 0; }
 .field label { font-size: 13px; color: var(--soil); }
+
 .field input, .field select {
   width: 100%;
   border: 1px solid var(--border);
@@ -197,24 +271,40 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
   color: var(--brown);
   padding: 12px;
 }
+
 .result {
   margin-top: 20px;
   padding: 18px;
   border-radius: 10px;
   background: var(--blue);
-  line-height: 1.7;
+  line-height: 1.8;
   overflow-wrap: anywhere;
 }
+
 .result.high { background: #E9CFCA; }
+.result.medium { background: #EBDDB8; }
 .result h3 { margin-bottom: 8px; }
-.notice { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.result p { margin-bottom: 0; }
+
+.notice {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
 .section-title { margin-bottom: 22px; }
+
 .footer {
   font-size: 11px;
   color: var(--muted);
   text-align: center;
   margin-top: 28px;
 }
+
+.status-message { font-size: 12px; margin-top: 10px; }
+.status-message.error { color: var(--red); }
+.status-message.success { color: #294B45; }
+
 @media (max-width: 1050px) {
   .sidebar { width: 205px; }
   main { padding: 24px 20px; }
@@ -222,6 +312,7 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
   .hero { grid-template-columns: 1fr; }
   .quote { display: none; }
 }
+
 @media (max-width: 700px) {
   .app { display: block; }
   .sidebar { width: 100%; padding: 18px; }
@@ -241,11 +332,14 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
+
   <aside class="sidebar">
     <div class="brand">FraudLens AI ✦</div>
     <div class="tagline">DETECT · ANALYZE · PREVENT</div>
+
     <nav class="nav">
       <button class="active" data-view="dashboard"><span>⌂</span> Dashboard</button>
       <button data-view="analysis"><span>▤</span> Transaction Analysis</button>
@@ -253,15 +347,21 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
       <button data-view="knowledge"><span>▧</span> RAG Knowledge Base</button>
       <button data-view="reports"><span>▥</span> Reports</button>
     </nav>
-    <div class="side-bottom">Smarter insights.<br>Safer transactions.<br><br>────────</div>
+
+    <div class="side-bottom">
+      Smarter insights.<br>
+      Safer transactions.<br><br>
+      ────────
+    </div>
   </aside>
 
   <main>
     <div class="topbar">
       <div class="eyebrow">Financial intelligence workspace</div>
-      <div class="profile">◉ &nbsp; Khushi Verma</div>
+      <div class="profile">◉ &nbsp; Fraud Intelligence Workspace</div>
     </div>
 
+    <!-- DASHBOARD -->
     <section class="view active" id="dashboard">
       <div class="hero">
         <div>
@@ -274,24 +374,24 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
 
       <div class="stats">
         <div class="stat">
-          <div class="stat-label">⚠ &nbsp; Fraud Detected</div>
-          <div class="stat-number">—</div>
-          <div class="stat-note">Run an analysis to see results</div>
+          <div class="stat-label">⚠ &nbsp; Fraud Predictions</div>
+          <div class="stat-number" id="fraud-count">—</div>
+          <div class="stat-note">From your analyses</div>
         </div>
         <div class="stat">
-          <div class="stat-label">✓ &nbsp; Legitimate Transactions</div>
-          <div class="stat-number">—</div>
-          <div class="stat-note">Based on model predictions</div>
+          <div class="stat-label">✓ &nbsp; Legitimate Predictions</div>
+          <div class="stat-number" id="legitimate-count">—</div>
+          <div class="stat-note">From your analyses</div>
         </div>
         <div class="stat">
-          <div class="stat-label">↗ &nbsp; Transaction Amount</div>
-          <div class="stat-number">—</div>
-          <div class="stat-note">Amount from your analysis</div>
+          <div class="stat-label">↗ &nbsp; Last Transaction Amount</div>
+          <div class="stat-number" id="last-amount">—</div>
+          <div class="stat-note">Dataset amount</div>
         </div>
         <div class="stat">
           <div class="stat-label">◷ &nbsp; Model Status</div>
-          <div class="stat-number" style="font-size:25px">Not connected</div>
-          <div class="stat-note">Python backend required</div>
+          <div class="stat-number" id="model-status" style="font-size:25px">Checking…</div>
+          <div class="stat-note" id="model-note">Connecting to local API</div>
         </div>
       </div>
 
@@ -309,36 +409,29 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
               <text x="8" y="34">High</text>
               <text x="8" y="79">Med</text>
               <text x="8" y="124">Low</text>
-              <text x="8" y="169">—</text>
-              <text x="48" y="193">Analysis</text>
+              <text x="48" y="193">Illustration</text>
               <text x="400" y="193">Timeline →</text>
             </g>
             <path d="M48 120 L105 92 L160 108 L215 65 L270 82 L325 48 L380 76 L435 36 L480 57"
               fill="none" stroke="#7198C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M48 153 L105 147 L160 157 L215 142 L270 151 L325 145 L380 159 L435 138 L480 150"
               fill="none" stroke="#4D0E12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <g fill="#7198C0">
-              <circle cx="48" cy="120" r="3"/><circle cx="105" cy="92" r="3"/>
-              <circle cx="160" cy="108" r="3"/><circle cx="215" cy="65" r="3"/>
-              <circle cx="270" cy="82" r="3"/><circle cx="325" cy="48" r="3"/>
-              <circle cx="380" cy="76" r="3"/><circle cx="435" cy="36" r="3"/>
-              <circle cx="480" cy="57" r="3"/>
-            </g>
           </svg>
           <div class="legend">
             <span><i class="dot blue-dot"></i>Transaction activity (illustrative)</span>
             <span><i class="dot red-dot"></i>Risk indicator (illustrative)</span>
           </div>
-          <p class="notice">Chart is illustrative until connected to real model outputs.</p>
+          <p class="notice">Chart is illustrative and is not a live dataset visualization.</p>
         </div>
 
         <div class="right-column">
           <div class="panel">
             <h3>Recent Investigations</h3>
             <div id="recent-list">
-              <p class="notice">No live investigations yet. Analyze a transaction to start your history.</p>
+              <p class="notice">Analyze a transaction to start your history.</p>
             </div>
           </div>
+
           <div class="panel">
             <h3>Quick Actions</h3>
             <div class="actions">
@@ -353,163 +446,437 @@ h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
       <div class="investigator">
         <div>
           <h2>AI Investigator</h2>
-          <p>Review a transaction, assess its risk, and explore relevant fraud guidance.</p>
+          <p>Review a dataset transaction, assess its risk, and explore fraud-prevention guidance.</p>
         </div>
         <button class="btn primary" data-go="investigator">Start Investigation →</button>
       </div>
     </section>
 
+    <!-- TRANSACTION ANALYSIS -->
     <section class="view" id="analysis">
       <div class="section-title">
         <div class="eyebrow">Transaction intelligence</div>
         <h1>Transaction Analysis</h1>
-        <p>Enter a transaction amount and a risk score to preview the interface.</p>
+        <p>Select a transaction from your dataset. The trained model will calculate the fraud probability.</p>
       </div>
+
       <div class="panel form-panel">
         <h2>Analyze a Transaction</h2>
+
         <form id="analysis-form">
           <div class="field">
-            <label for="amount">Transaction amount (dataset units)</label>
-            <input id="amount" type="number" min="0" step="0.01" placeholder="e.g. 149.62" required>
+            <label for="transaction-select">Select a dataset transaction</label>
+            <select id="transaction-select" required>
+              <option value="">Loading transactions…</option>
+            </select>
           </div>
-          <div class="field">
-            <label for="risk">Demo risk probability (%)</label>
-            <input id="risk" type="number" min="0" max="100" step="1" value="20" required>
-          </div>
-          <button class="btn primary" type="submit">Preview Risk Assessment →</button>
+
+          <p class="notice" id="transaction-info">
+            Transaction choices will load from the Python backend.
+          </p>
+
+          <button class="btn primary" id="analyze-button" type="submit">
+            Analyze with Random Forest →
+          </button>
+          <div id="connection-message" class="status-message" role="status"></div>
         </form>
+
         <div id="analysis-result" aria-live="polite"></div>
-        <p class="notice">Demo only: this form does not call your trained Random Forest model. The real model connection comes next.</p>
+
+        <p class="notice">
+          Uses the trained Random Forest model on the credit card benchmark dataset.
+          Results describe historical dataset transactions, not live payments.
+        </p>
       </div>
     </section>
 
+    <!-- AI INVESTIGATOR -->
     <section class="view" id="investigator">
       <div class="section-title">
-        <div class="eyebrow">Retrieval-augmented intelligence</div>
+        <div class="eyebrow">Investigation workspace</div>
         <h1>AI Investigator</h1>
-        <p>Explore a transaction's risk assessment and supporting fraud-prevention guidance.</p>
+        <p>Review model results and their dataset labels.</p>
       </div>
+
       <div class="panel form-panel">
-        <h2>Investigation Workspace</h2>
-        <p>Start by entering a transaction in the Transaction Analysis section. Your existing Python project contains the Random Forest model and RAG retrieval pipeline.</p>
+        <h2>Investigation Summary</h2>
+        <p>Run a transaction analysis first. Its latest result will appear here.</p>
         <button class="btn primary" data-go="analysis">Go to Transaction Analysis →</button>
         <div id="investigator-result" class="result" style="display:none"></div>
-        <p class="notice">Live investigation requires the Python backend. No actual AI API call is made by this prototype.</p>
+        <p class="notice">
+          This version displays model-based results. Retrieval-augmented guidance
+          will require a separate connection to the RAG pipeline.
+        </p>
       </div>
     </section>
 
+    <!-- KNOWLEDGE BASE -->
     <section class="view" id="knowledge">
       <div class="section-title">
         <div class="eyebrow">Retrieval-augmented generation</div>
         <h1>RAG Knowledge Base</h1>
-        <p>Reference material used to support fraud investigation.</p>
+        <p>General fraud-prevention reference information.</p>
       </div>
+
       <div class="dashboard">
         <div class="panel">
           <h2>Fraud Indicators</h2>
-          <p>Common signals include unusual transaction patterns, unexpected transaction values, repeated attempts, and activity that differs from an established baseline.</p>
-          <p class="notice">Reference: <code>fraud_indicators.txt</code></p>
+          <p>Potential signals include unusual transaction patterns, unexpected transaction values, repeated attempts, and activity that differs from an established baseline.</p>
+          <p class="notice">General guidance, not live retrieval results.</p>
         </div>
         <div class="panel">
           <h2>Transaction Monitoring</h2>
-          <p>Monitor suspicious activity, review high-risk alerts, and use additional verification before making consequential decisions.</p>
-          <p class="notice">Reference: <code>transaction_monitoring.txt</code></p>
+          <p>Review high-risk alerts, examine relevant context, and use additional verification before consequential decisions.</p>
+          <p class="notice">General guidance, not live retrieval results.</p>
         </div>
       </div>
-      <p class="notice">These are general examples, not live results from your FAISS retrieval system.</p>
     </section>
 
+    <!-- REPORTS -->
     <section class="view" id="reports">
       <div class="section-title">
         <div class="eyebrow">Review and documentation</div>
         <h1>Reports</h1>
-        <p>Your investigation history will appear here after backend integration.</p>
+        <p>Review the transactions analyzed in this browser session.</p>
       </div>
+
       <div class="panel">
         <h2>Investigation History</h2>
         <div id="report-list">No reports generated yet.</div>
-        <p class="notice">Prototype reports remain in this browser session only and are not saved to a database.</p>
+        <p class="notice">
+          This history is kept in the current browser session only.
+          It is not saved to a database.
+        </p>
       </div>
     </section>
 
-    <div class="footer">FraudLens AI · Machine learning + RAG · Decision support, not a substitute for human review</div>
+    <div class="footer">
+      FraudLens AI · Machine learning + RAG · Decision support, not a substitute for human review
+    </div>
   </main>
 </div>
 
 <script>
+/*
+  LOCAL DEVELOPMENT CONFIGURATION
+
+  The backend must be running at:
+  http://127.0.0.1:8001
+
+  This URL works only on the computer running the backend.
+*/
+const API_BASE = "http://127.0.0.1:8001";
+
 const navButtons = document.querySelectorAll("[data-view]");
 const views = document.querySelectorAll(".view");
 
 function showView(name) {
-  views.forEach(view => view.classList.toggle("active", view.id === name));
-  navButtons.forEach(button =>
-    button.classList.toggle("active", button.dataset.view === name)
-  );
+  views.forEach(view => {
+    view.classList.toggle("active", view.id === name);
+  });
+
+  navButtons.forEach(button => {
+    button.classList.toggle("active", button.dataset.view === name);
+  });
+
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-navButtons.forEach(button =>
-  button.addEventListener("click", () => showView(button.dataset.view))
-);
+navButtons.forEach(button => {
+  button.addEventListener("click", () => showView(button.dataset.view));
+});
 
-document.querySelectorAll("[data-go]").forEach(button =>
-  button.addEventListener("click", () => showView(button.dataset.go))
-);
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => showView(button.dataset.go));
+});
 
-const history = [];
+const historyRecords = [];
+let transactions = [];
+let latestResult = null;
 
-document.getElementById("analysis-form").addEventListener("submit", event => {
+const transactionSelect = document.getElementById("transaction-select");
+const transactionInfo = document.getElementById("transaction-info");
+const connectionMessage = document.getElementById("connection-message");
+const analyzeButton = document.getElementById("analyze-button");
+
+function formatAmount(value) {
+  return Number(value).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function setConnectionMessage(message, isError = false) {
+  connectionMessage.textContent = message;
+  connectionMessage.className =
+    "status-message " + (isError ? "error" : "success");
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+async function checkBackend() {
+  const status = document.getElementById("model-status");
+  const note = document.getElementById("model-note");
+
+  try {
+    const response = await fetch(`${API_BASE}/`);
+
+    if (!response.ok) {
+      throw new Error("Backend health check failed.");
+    }
+
+    const data = await response.json();
+
+    status.textContent = data.model_loaded ? "Connected" : "Unavailable";
+    note.textContent = `${Number(data.dataset_rows).toLocaleString()} dataset rows`;
+  } catch (error) {
+    status.textContent = "Offline";
+    note.textContent = "Start the Python backend on port 8001";
+  }
+}
+
+async function loadTransactions() {
+  transactionSelect.innerHTML = '<option value="">Loading transactions…</option>';
+  transactionSelect.disabled = true;
+
+  try {
+    const response = await fetch(`${API_BASE}/api/transactions?limit=20`);
+
+    if (!response.ok) {
+      throw new Error(`Could not load transactions (HTTP ${response.status}).`);
+    }
+
+    const data = await response.json();
+    transactions = data.transactions || [];
+
+    if (transactions.length === 0) {
+      throw new Error("The backend returned no transactions.");
+    }
+
+    transactionSelect.innerHTML =
+      '<option value="">Choose a transaction…</option>' +
+      transactions.map(transaction => `
+        <option value="${transaction.row_number}">
+          Row ${transaction.row_number} · Amount ${formatAmount(transaction.amount)}
+        </option>
+      `).join("");
+
+    transactionSelect.disabled = false;
+    transactionInfo.textContent =
+      `Loaded ${transactions.length} sample transactions from your dataset.`;
+
+    setConnectionMessage("Backend connected. Select a transaction to begin.");
+  } catch (error) {
+    transactionSelect.innerHTML =
+      '<option value="">Unable to load transactions</option>';
+
+    transactionInfo.textContent =
+      "The backend could not provide transaction choices.";
+
+    setConnectionMessage(
+      `${error.message} Make sure your backend is running at ${API_BASE}.`,
+      true
+    );
+  }
+}
+
+transactionSelect.addEventListener("change", () => {
+  const selected = transactions.find(
+    transaction => transaction.row_number === Number(transactionSelect.value)
+  );
+
+  if (selected) {
+    transactionInfo.textContent =
+      `Selected row ${selected.row_number}. Dataset amount: ${formatAmount(selected.amount)}. ` +
+      `Actual dataset label: ${selected.dataset_label}.`;
+  }
+});
+
+document.getElementById("analysis-form").addEventListener("submit", async event => {
   event.preventDefault();
 
-  const amount = Number(document.getElementById("amount").value);
-  const probability = Number(document.getElementById("risk").value);
+  const rowNumber = Number(transactionSelect.value);
 
-  if (!Number.isFinite(amount) || amount < 0 ||
-      !Number.isFinite(probability) || probability < 0 || probability > 100) {
+  if (!rowNumber) {
+    setConnectionMessage("Please select a transaction first.", true);
     return;
   }
 
-  const level = probability >= 80 ? "HIGH" :
-                probability >= 50 ? "MEDIUM" : "LOW";
+  analyzeButton.disabled = true;
+  analyzeButton.textContent = "Analyzing…";
+  setConnectionMessage("Sending the selected transaction to the Random Forest model…");
+
+  try {
+    const response = await fetch(`${API_BASE}/api/analyze`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        row_number: rowNumber
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || `Analysis failed (HTTP ${response.status}).`);
+    }
+
+    latestResult = data;
+
+    renderAnalysisResult(data);
+    addHistoryRecord(data);
+    renderDashboard();
+    renderInvestigator(data);
+
+    setConnectionMessage("Analysis complete. Result returned by the trained model.");
+  } catch (error) {
+    setConnectionMessage(
+      `${error.message} Check that the backend is running and try again.`,
+      true
+    );
+  } finally {
+    analyzeButton.disabled = false;
+    analyzeButton.textContent = "Analyze with Random Forest →";
+  }
+});
+
+function renderAnalysisResult(data) {
   const result = document.getElementById("analysis-result");
 
-  result.className = "result" + (level === "HIGH" ? " high" : "");
+  const riskClass = data.risk_level === "HIGH" ? "high" :
+                    data.risk_level === "MEDIUM" ? "medium" : "";
+
+  const predictedLabel = Number(data.predicted_class) === 1
+    ? "Fraud"
+    : "Legitimate";
+
+  result.className = `result ${riskClass}`;
+
   result.innerHTML = `
-    <h3>${level} RISK · DEMO RESULT</h3>
-    <div><strong>Transaction amount:</strong> ${amount.toFixed(2)} dataset units</div>
-    <div><strong>Entered risk probability:</strong> ${probability.toFixed(0)}%</div>
-    <p>This is a simulated assessment based on the probability you entered.
-    It is not a prediction from the trained model.</p>
+    <h3>${escapeHtml(data.risk_level)} RISK · MODEL RESULT</h3>
+    <div><strong>Dataset row:</strong> ${Number(data.row_number)}</div>
+    <div><strong>Transaction amount:</strong> ${formatAmount(data.amount)} dataset units</div>
+    <div><strong>Predicted class:</strong> ${predictedLabel}</div>
+    <div><strong>Fraud probability:</strong> ${Number(data.fraud_probability).toFixed(2)}%</div>
+    <div><strong>Actual dataset label:</strong> ${escapeHtml(data.dataset_label)}</div>
+    <div><strong>Prediction matches dataset label:</strong>
+      ${data.correct_prediction ? "Yes" : "No"}
+    </div>
+    <p class="notice">${escapeHtml(data.notice || "Benchmark dataset result.")}</p>
   `;
+}
 
-  const record = { amount, probability, level, time: new Date().toLocaleTimeString() };
-  history.unshift(record);
+function addHistoryRecord(data) {
+  historyRecords.unshift({
+    rowNumber: data.row_number,
+    amount: data.amount,
+    probability: data.fraud_probability,
+    level: data.risk_level,
+    predictedClass: data.predicted_class,
+    datasetLabel: data.dataset_label,
+    correct: data.correct_prediction,
+    time: new Date().toLocaleTimeString()
+  });
 
-  document.getElementById("recent-list").innerHTML = history.slice(0, 4).map(item => `
+  renderHistory();
+}
+
+function renderHistory() {
+  const recentList = document.getElementById("recent-list");
+  const reportList = document.getElementById("report-list");
+
+  if (historyRecords.length === 0) {
+    recentList.innerHTML =
+      '<p class="notice">No investigations yet. Analyze a transaction to begin.</p>';
+
+    reportList.textContent = "No reports generated yet.";
+    return;
+  }
+
+  recentList.innerHTML = historyRecords.slice(0, 4).map(item => `
     <div class="alert">
-      <div><strong>${item.amount.toFixed(2)} units</strong>
-      <small>${item.time} · ${item.level} risk</small></div>
-      <span class="pill ${item.level === "LOW" ? "safe" : ""}">${item.level}</span>
+      <div>
+        <strong>Dataset row ${item.rowNumber}</strong>
+        <small>${item.time} · ${item.level} risk · ${item.probability.toFixed(2)}% fraud probability</small>
+      </div>
+      <span class="pill ${item.level === "LOW" ? "safe" : ""}">
+        ${escapeHtml(item.level)}
+      </span>
     </div>
   `).join("");
 
-  document.getElementById("report-list").innerHTML = history.map(item => `
+  reportList.innerHTML = historyRecords.map(item => `
     <div class="alert">
-      <div><strong>${item.level} risk</strong>
-      <small>Amount: ${item.amount.toFixed(2)} · Probability: ${item.probability}% · ${item.time}</small></div>
-      <span class="pill">${item.level}</span>
+      <div>
+        <strong>Row ${item.rowNumber} · ${escapeHtml(item.level)} risk</strong>
+        <small>
+          Amount: ${formatAmount(item.amount)} ·
+          Fraud probability: ${item.probability.toFixed(2)}% ·
+          Predicted: ${Number(item.predictedClass) === 1 ? "Fraud" : "Legitimate"} ·
+          Actual: ${escapeHtml(item.datasetLabel)} ·
+          Match: ${item.correct ? "Yes" : "No"} ·
+          ${item.time}
+        </small>
+      </div>
+      <span class="pill ${item.level === "LOW" ? "safe" : ""}">
+        ${escapeHtml(item.level)}
+      </span>
     </div>
   `).join("");
+}
 
-  const investigatorResult = document.getElementById("investigator-result");
-  investigatorResult.style.display = "block";
-  investigatorResult.innerHTML = `
-    <h3>${level} Risk · Demo Assessment</h3>
-    Risk probability: ${probability.toFixed(0)}%.<br>
-    Amount: ${amount.toFixed(2)} dataset units.<br>
-    Next step: connect the Random Forest model and RAG pipeline for a real investigation.
+function renderDashboard() {
+  const fraudCount = historyRecords.filter(
+    item => Number(item.predictedClass) === 1
+  ).length;
+
+  const legitimateCount = historyRecords.length - fraudCount;
+  const last = historyRecords[0];
+
+  document.getElementById("fraud-count").textContent = fraudCount;
+  document.getElementById("legitimate-count").textContent = legitimateCount;
+  document.getElementById("last-amount").textContent =
+    last ? formatAmount(last.amount) : "—";
+}
+
+function renderInvestigator(data) {
+  const result = document.getElementById("investigator-result");
+  const predictedLabel = Number(data.predicted_class) === 1
+    ? "Fraud"
+    : "Legitimate";
+
+  result.style.display = "block";
+  result.className = `result ${data.risk_level === "HIGH" ? "high" : data.risk_level === "MEDIUM" ? "medium" : ""}`;
+
+  result.innerHTML = `
+    <h3>${escapeHtml(data.risk_level)} RISK · MODEL INVESTIGATION</h3>
+    <div><strong>Dataset row:</strong> ${Number(data.row_number)}</div>
+    <div><strong>Predicted class:</strong> ${predictedLabel}</div>
+    <div><strong>Fraud probability:</strong> ${Number(data.fraud_probability).toFixed(2)}%</div>
+    <div><strong>Actual dataset label:</strong> ${escapeHtml(data.dataset_label)}</div>
+    <div><strong>Prediction correct:</strong> ${data.correct_prediction ? "Yes" : "No"}</div>
+    <p>This is a model prediction on a historical benchmark dataset, not a live payment decision.</p>
   `;
-});
+}
+
+async function initializeApp() {
+  await checkBackend();
+  await loadTransactions();
+  renderHistory();
+  renderDashboard();
+}
+
+initializeApp();
 </script>
 </body>
 </html>
