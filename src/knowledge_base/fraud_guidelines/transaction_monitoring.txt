@@ -1,0 +1,49 @@
+TRANSACTION MONITORING AND FRAUD INVESTIGATION
+
+1. Risk-Based Transaction Monitoring
+
+Financial institutions can use risk-based transaction monitoring to identify transactions or patterns that may require additional review. Monitoring should consider the risk associated with the customer, transaction, product, and other available information.
+
+2. Comparing Activity With Expected Behavior
+
+A transaction may require investigation when it differs significantly from the customer's normal or expected activity. Understanding normal transaction behavior helps identify unusual activity.
+
+3. Transaction Amount
+
+The size or value of a transaction can be one factor in risk assessment. A large transaction should not automatically be considered fraudulent because legitimate customers can also make large purchases or transfers.
+
+4. Transaction Frequency and Velocity
+
+Repeated transactions or an unusual increase in transaction frequency can be relevant risk indicators. Transaction velocity can be monitored together with other characteristics.
+
+5. Unusual Transaction Patterns
+
+Monitoring systems can identify unusual transaction patterns and generate alerts for further investigation. An alert is an indication that additional analysis may be appropriate; it does not by itself establish that fraud has occurred.
+
+6. Customer and Transaction Context
+
+Investigation should consider available customer and transaction information together. Relevant information may include transaction history, customer profile, changes in behavior, and other available risk information.
+
+7. False Positives
+
+Monitoring systems can generate alerts for legitimate activity. Investigation processes should therefore distinguish potentially suspicious activity from legitimate transactions and reduce unnecessary false positives.
+
+8. Automated Monitoring
+
+Automated transaction-monitoring systems can help process large volumes of transactions and identify unusual activity. Machine-learning systems can be used as supplementary analytical tools for detecting patterns in transaction data.
+
+9. Investigation and Escalation
+
+When monitoring identifies potentially suspicious activity, the case can be reviewed using the available transaction and customer information. Institutions should have defined procedures for analyzing, investigating, and escalating suspicious activity.
+
+10. Important Limitation
+
+A fraud-detection model produces a prediction based on patterns learned from data. A high fraud probability should be treated as a risk signal rather than definitive proof that a transaction is fraudulent.
+
+SOURCE NOTES
+
+The concepts in this document are based on publicly available guidance from the Reserve Bank of India (RBI) and the Basel Committee on Banking Supervision / Bank for International Settlements (BIS).
+
+RBI guidance discusses risk-based transaction monitoring, fraud detection and prevention mechanisms, and transaction monitoring controls.
+
+BIS guidance discusses monitoring transaction activity against customer profiles, identifying unusual transactions and patterns, managing alerts, and investigating suspicious activity.

@@ -1,0 +1,22 @@
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dataset and generated data
+data/raw/
+data/processed/
+
+# Model artifacts
+models/*.pkl
+models/*.joblib
+
+# Local editor files
+.vscode/

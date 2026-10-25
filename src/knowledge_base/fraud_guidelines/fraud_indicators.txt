@@ -1,0 +1,29 @@
+FRAUD INVESTIGATION — COMMON INDICATORS
+
+1. Unusual Transaction Amount
+
+A transaction that is significantly different from a customer's normal transaction pattern may require additional review. A high transaction amount alone does not prove that a transaction is fraudulent.
+
+2. Unusual Transaction Time
+
+Transactions occurring at unusual times compared with a customer's normal activity can be considered a risk indicator. Time of day should be evaluated together with other transaction information.
+
+3. Transaction Pattern Changes
+
+A sudden change from a customer's usual transaction behavior may be relevant during fraud investigation. Examples include unusual spending patterns, unexpected transaction frequency, or transactions that differ significantly from previous activity.
+
+4. Multiple Risk Indicators
+
+Fraud detection should not normally depend on a single indicator. Multiple suspicious characteristics can be considered together when assessing transaction risk.
+
+5. Fraud Detection Model Scores
+
+A machine-learning fraud detection model can assign a probability or risk score to a transaction. A high model score indicates that the transaction resembles patterns associated with fraud in the model's training data. It does not by itself prove that fraud occurred.
+
+6. False Positives
+
+A legitimate transaction can sometimes be classified as suspicious. Examples may include unusually large purchases, travel-related spending, or other activity that differs from a customer's normal behavior.
+
+7. Investigation Principle
+
+A suspicious transaction should be investigated using multiple pieces of information rather than relying on one indicator alone. The final determination should consider the available transaction and account information.
