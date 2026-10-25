@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FraudLens AI — Fraud Intelligence</title>
+<style>
+:root {
+  --cream: #F5EFC6;
+  --red: #4D0E12;
+  --blue: #A5BCD6;
+  --soil: #4A2E27;
+  --brown: #231815;
+  --white: #FFFDF4;
+  --muted: #89786A;
+  --border: rgba(74,46,39,.14);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brown);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 245px;
+  flex-shrink: 0;
+  background: var(--brown);
+  color: var(--cream);
+  padding: 30px 17px;
+  display: flex;
+  flex-direction: column;
+}
+.brand {
+  font-family: Georgia, serif;
+  font-size: 29px;
+  letter-spacing: -1px;
+  margin: 0 0 5px 7px;
+}
+.tagline {
+  font-size: 10px;
+  letter-spacing: 3px;
+  margin: 7px 7px 38px;
+  color: var(--blue);
+}
+.nav { display: grid; gap: 7px; }
+.nav button {
+  text-align: left;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 12px;
+  background: transparent;
+  color: #E7DACB;
+  transition: .2s;
+}
+.nav button:hover, .nav button.active {
+  background: var(--soil);
+  color: var(--cream);
+}
+.nav button span { display: inline-block; width: 28px; }
+.side-bottom {
+  margin-top: auto;
+  padding: 25px 7px 0;
+  color: var(--blue);
+  font-family: Georgia, serif;
+  font-style: italic;
+  line-height: 1.6;
+}
+main { flex: 1; min-width: 0; padding: 29px 34px 40px; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 27px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--soil);
+  text-transform: uppercase;
+}
+.profile { font-size: 13px; color: var(--soil); }
+.hero {
+  display: grid;
+  grid-template-columns: 1.5fr .8fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+h1 {
+  font: 56px/1.05 Georgia, serif;
+  letter-spacing: -2px;
+  margin: 10px 0;
+}
+.hero p { color: var(--soil); line-height: 1.7; max-width: 520px; }
+.quote {
+  border-left: 2px solid var(--red);
+  padding: 12px 18px;
+  color: var(--soil);
+  font: italic 19px/1.5 Georgia, serif;
+}
+.panel, .stat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 0;
+}
+.panel { background: rgba(255,253,244,.48); }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stat { background: var(--white); }
+.stat:nth-child(1) { background: #F0E5B9; }
+.stat:nth-child(2) { background: var(--blue); }
+.stat:nth-child(3) { background: #CBB09D; }
+.stat:nth-child(4) { background: var(--soil); color: var(--cream); }
+.stat-label { font-size: 12px; line-height: 1.5; }
+.stat-number { font: 31px Georgia, serif; margin: 15px 0 8px; }
+.stat-note { font-size: 11px; opacity: .78; }
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+h2 { font: 24px Georgia, serif; margin: 0 0 18px; }
+h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
+.chart-panel { min-height: 300px; }
+.chart { width: 100%; height: auto; display: block; }
+.legend { display: flex; gap: 18px; font-size: 12px; margin-top: 12px; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.red-dot { background: var(--red); }
+.blue-dot { background: #7198C0; }
+.right-column { display: grid; gap: 18px; }
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+.alert:last-child { border-bottom: 0; }
+.alert strong { font-size: 13px; font-weight: 600; }
+.alert small { display: block; color: var(--muted); margin-top: 5px; }
+.pill {
+  background: #E9CFCA;
+  color: var(--red);
+  border-radius: 20px;
+  padding: 5px 9px;
+  font-size: 10px;
+}
+.pill.safe { background: #D9E6F1; color: #294B70; }
+.actions { display: grid; gap: 9px; }
+.btn {
+  border-radius: 8px;
+  border: 1px solid var(--red);
+  padding: 12px 14px;
+  background: transparent;
+  color: var(--red);
+  text-align: left;
+}
+.btn.primary { background: var(--red); color: var(--white); }
+.btn.blue { background: var(--blue); border-color: var(--blue); color: var(--brown); }
+.btn:hover { filter: brightness(.96); }
+.investigator {
+  margin-top: 18px;
+  background: var(--blue);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.investigator h2 { margin-bottom: 8px; }
+.investigator p { font-size: 13px; line-height: 1.6; margin: 0; }
+.investigator .btn { min-width: 160px; }
+.view { display: none; }
+.view.active { display: block; }
+.form-panel { max-width: 760px; }
+.field { display: grid; gap: 7px; margin: 16px 0; }
+.field label { font-size: 13px; color: var(--soil); }
+.field input, .field select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--brown);
+  padding: 12px;
+}
+.result {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 10px;
+  background: var(--blue);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.result.high { background: #E9CFCA; }
+.result h3 { margin-bottom: 8px; }
+.notice { color: var(--muted); font-size: 12px; line-height: 1.6; }
+.section-title { margin-bottom: 22px; }
+.footer {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 28px;
+}
+@media (max-width: 1050px) {
+  .sidebar { width: 205px; }
+  main { padding: 24px 20px; }
+  .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .hero { grid-template-columns: 1fr; }
+  .quote { display: none; }
+}
+@media (max-width: 700px) {
+  .app { display: block; }
+  .sidebar { width: 100%; padding: 18px; }
+  .brand { font-size: 25px; }
+  .tagline { margin-bottom: 18px; }
+  .nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .nav button { padding: 10px; font-size: 12px; }
+  .side-bottom { display: none; }
+  main { padding: 22px 15px; }
+  h1 { font-size: 42px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .investigator { align-items: flex-start; flex-direction: column; }
+  .stats { gap: 9px; }
+  .stat { padding: 14px; }
+  .stat-number { font-size: 26px; }
+  .profile { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">FraudLens AI ✦</div>
+    <div class="tagline">DETECT · ANALYZE · PREVENT</div>
+    <nav class="nav">
+      <button class="active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+      <button data-view="analysis"><span>▤</span> Transaction Analysis</button>
+      <button data-view="investigator"><span>✳</span> AI Investigator</button>
+      <button data-view="knowledge"><span>▧</span> RAG Knowledge Base</button>
+      <button data-view="reports"><span>▥</span> Reports</button>
+    </nav>
+    <div class="side-bottom">Smarter insights.<br>Safer transactions.<br><br>────────</div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div class="eyebrow">Financial intelligence workspace</div>
+      <div class="profile">◉ &nbsp; Khushi Verma</div>
+    </div>
+
+    <section class="view active" id="dashboard">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">Your fraud intelligence workspace</div>
+          <h1>FraudLens AI</h1>
+          <p>Investigate suspicious transactions with machine learning and retrieval-augmented AI guidance.</p>
+        </div>
+        <div class="quote">“Not just transactions,<br>but trust.”</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">⚠ &nbsp; Fraud Detected</div>
+          <div class="stat-number">—</div>
+          <div class="stat-note">Run an analysis to see results</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">✓ &nbsp; Legitimate Transactions</div>
+          <div class="stat-number">—</div>
+          <div class="stat-note">Based on model predictions</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">↗ &nbsp; Transaction Amount</div>
+          <div class="stat-number">—</div>
+          <div class="stat-note">Amount from your analysis</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">◷ &nbsp; Model Status</div>
+          <div class="stat-number" style="font-size:25px">Not connected</div>
+          <div class="stat-note">Python backend required</div>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <div class="panel chart-panel">
+          <h2>Investigation Overview</h2>
+          <svg class="chart" viewBox="0 0 500 210" role="img" aria-label="Illustrative transaction chart">
+            <g stroke="#4A2E27" stroke-opacity=".12">
+              <line x1="48" y1="30" x2="480" y2="30"/>
+              <line x1="48" y1="75" x2="480" y2="75"/>
+              <line x1="48" y1="120" x2="480" y2="120"/>
+              <line x1="48" y1="165" x2="480" y2="165"/>
+            </g>
+            <g fill="#89786A" font-size="10">
+              <text x="8" y="34">High</text>
+              <text x="8" y="79">Med</text>
+              <text x="8" y="124">Low</text>
+              <text x="8" y="169">—</text>
+              <text x="48" y="193">Analysis</text>
+              <text x="400" y="193">Timeline →</text>
+            </g>
+            <path d="M48 120 L105 92 L160 108 L215 65 L270 82 L325 48 L380 76 L435 36 L480 57"
+              fill="none" stroke="#7198C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M48 153 L105 147 L160 157 L215 142 L270 151 L325 145 L380 159 L435 138 L480 150"
+              fill="none" stroke="#4D0E12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g fill="#7198C0">
+              <circle cx="48" cy="120" r="3"/><circle cx="105" cy="92" r="3"/>
+              <circle cx="160" cy="108" r="3"/><circle cx="215" cy="65" r="3"/>
+              <circle cx="270" cy="82" r="3"/><circle cx="325" cy="48" r="3"/>
+              <circle cx="380" cy="76" r="3"/><circle cx="435" cy="36" r="3"/>
+              <circle cx="480" cy="57" r="3"/>
+            </g>
+          </svg>
+          <div class="legend">
+            <span><i class="dot blue-dot"></i>Transaction activity (illustrative)</span>
+            <span><i class="dot red-dot"></i>Risk indicator (illustrative)</span>
+          </div>
+          <p class="notice">Chart is illustrative until connected to real model outputs.</p>
+        </div>
+
+        <div class="right-column">
+          <div class="panel">
+            <h3>Recent Investigations</h3>
+            <div id="recent-list">
+              <p class="notice">No live investigations yet. Analyze a transaction to start your history.</p>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Quick Actions</h3>
+            <div class="actions">
+              <button class="btn primary" data-go="analysis">＋ &nbsp; Analyze Transaction</button>
+              <button class="btn" data-go="investigator">✳ &nbsp; Open AI Investigator</button>
+              <button class="btn blue" data-go="knowledge">▧ &nbsp; View RAG Guidance</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="investigator">
+        <div>
+          <h2>AI Investigator</h2>
+          <p>Review a transaction, assess its risk, and explore relevant fraud guidance.</p>
+        </div>
+        <button class="btn primary" data-go="investigator">Start Investigation →</button>
+      </div>
+    </section>
+
+    <section class="view" id="analysis">
+      <div class="section-title">
+        <div class="eyebrow">Transaction intelligence</div>
+        <h1>Transaction Analysis</h1>
+        <p>Enter a transaction amount and a risk score to preview the interface.</p>
+      </div>
+      <div class="panel form-panel">
+        <h2>Analyze a Transaction</h2>
+        <form id="analysis-form">
+          <div class="field">
+            <label for="amount">Transaction amount (dataset units)</label>
+            <input id="amount" type="number" min="0" step="0.01" placeholder="e.g. 149.62" required>
+          </div>
+          <div class="field">
+            <label for="risk">Demo risk probability (%)</label>
+            <input id="risk" type="number" min="0" max="100" step="1" value="20" required>
+          </div>
+          <button class="btn primary" type="submit">Preview Risk Assessment →</button>
+        </form>
+        <div id="analysis-result" aria-live="polite"></div>
+        <p class="notice">Demo only: this form does not call your trained Random Forest model. The real model connection comes next.</p>
+      </div>
+    </section>
+
+    <section class="view" id="investigator">
+      <div class="section-title">
+        <div class="eyebrow">Retrieval-augmented intelligence</div>
+        <h1>AI Investigator</h1>
+        <p>Explore a transaction's risk assessment and supporting fraud-prevention guidance.</p>
+      </div>
+      <div class="panel form-panel">
+        <h2>Investigation Workspace</h2>
+        <p>Start by entering a transaction in the Transaction Analysis section. Your existing Python project contains the Random Forest model and RAG retrieval pipeline.</p>
+        <button class="btn primary" data-go="analysis">Go to Transaction Analysis →</button>
+        <div id="investigator-result" class="result" style="display:none"></div>
+        <p class="notice">Live investigation requires the Python backend. No actual AI API call is made by this prototype.</p>
+      </div>
+    </section>
+
+    <section class="view" id="knowledge">
+      <div class="section-title">
+        <div class="eyebrow">Retrieval-augmented generation</div>
+        <h1>RAG Knowledge Base</h1>
+        <p>Reference material used to support fraud investigation.</p>
+      </div>
+      <div class="dashboard">
+        <div class="panel">
+          <h2>Fraud Indicators</h2>
+          <p>Common signals include unusual transaction patterns, unexpected transaction values, repeated attempts, and activity that differs from an established baseline.</p>
+          <p class="notice">Reference: <code>fraud_indicators.txt</code></p>
+        </div>
+        <div class="panel">
+          <h2>Transaction Monitoring</h2>
+          <p>Monitor suspicious activity, review high-risk alerts, and use additional verification before making consequential decisions.</p>
+          <p class="notice">Reference: <code>transaction_monitoring.txt</code></p>
+        </div>
+      </div>
+      <p class="notice">These are general examples, not live results from your FAISS retrieval system.</p>
+    </section>
+
+    <section class="view" id="reports">
+      <div class="section-title">
+        <div class="eyebrow">Review and documentation</div>
+        <h1>Reports</h1>
+        <p>Your investigation history will appear here after backend integration.</p>
+      </div>
+      <div class="panel">
+        <h2>Investigation History</h2>
+        <div id="report-list">No reports generated yet.</div>
+        <p class="notice">Prototype reports remain in this browser session only and are not saved to a database.</p>
+      </div>
+    </section>
+
+    <div class="footer">FraudLens AI · Machine learning + RAG · Decision support, not a substitute for human review</div>
+  </main>
+</div>
+
+<script>
+const navButtons = document.querySelectorAll("[data-view]");
+const views = document.querySelectorAll(".view");
+
+function showView(name) {
+  views.forEach(view => view.classList.toggle("active", view.id === name));
+  navButtons.forEach(button =>
+    button.classList.toggle("active", button.dataset.view === name)
+  );
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+navButtons.forEach(button =>
+  button.addEventListener("click", () => showView(button.dataset.view))
+);
+
+document.querySelectorAll("[data-go]").forEach(button =>
+  button.addEventListener("click", () => showView(button.dataset.go))
+);
+
+const history = [];
+
+document.getElementById("analysis-form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const amount = Number(document.getElementById("amount").value);
+  const probability = Number(document.getElementById("risk").value);
+
+  if (!Number.isFinite(amount) || amount < 0 ||
+      !Number.isFinite(probability) || probability < 0 || probability > 100) {
+    return;
+  }
+
+  const level = probability >= 80 ? "HIGH" :
+                probability >= 50 ? "MEDIUM" : "LOW";
+  const result = document.getElementById("analysis-result");
+
+  result.className = "result" + (level === "HIGH" ? " high" : "");
+  result.innerHTML = `
+    <h3>${level} RISK · DEMO RESULT</h3>
+    <div><strong>Transaction amount:</strong> ${amount.toFixed(2)} dataset units</div>
+    <div><strong>Entered risk probability:</strong> ${probability.toFixed(0)}%</div>
+    <p>This is a simulated assessment based on the probability you entered.
+    It is not a prediction from the trained model.</p>
+  `;
+
+  const record = { amount, probability, level, time: new Date().toLocaleTimeString() };
+  history.unshift(record);
+
+  document.getElementById("recent-list").innerHTML = history.slice(0, 4).map(item => `
+    <div class="alert">
+      <div><strong>${item.amount.toFixed(2)} units</strong>
+      <small>${item.time} · ${item.level} risk</small></div>
+      <span class="pill ${item.level === "LOW" ? "safe" : ""}">${item.level}</span>
+    </div>
+  `).join("");
+
+  document.getElementById("report-list").innerHTML = history.map(item => `
+    <div class="alert">
+      <div><strong>${item.level} risk</strong>
+      <small>Amount: ${item.amount.toFixed(2)} · Probability: ${item.probability}% · ${item.time}</small></div>
+      <span class="pill">${item.level}</span>
+    </div>
+  `).join("");
+
+  const investigatorResult = document.getElementById("investigator-result");
+  investigatorResult.style.display = "block";
+  investigatorResult.innerHTML = `
+    <h3>${level} Risk · Demo Assessment</h3>
+    Risk probability: ${probability.toFixed(0)}%.<br>
+    Amount: ${amount.toFixed(2)} dataset units.<br>
+    Next step: connect the Random Forest model and RAG pipeline for a real investigation.
+  `;
+});
+</script>
+</body>
+</html>
