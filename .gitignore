@@ -15,8 +15,10 @@ data/raw/
 data/processed/
 
 # Model artifacts
+# Ignore model artifacts except the production model
 models/*.pkl
 models/*.joblib
+!models/random_forest_model.pkl
 
 # Local editor files
 .vscode/
