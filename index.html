@@ -1,585 +1,342 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FraudLens AI — Fraud Intelligence</title>
-
 <style>
-:root {
-  --cream: #F5EFC6;
-  --red: #4D0E12;
-  --blue: #A5BCD6;
-  --soil: #4A2E27;
-  --brown: #231815;
-  --white: #FFFDF4;
-  --muted: #89786A;
-  --border: rgba(74,46,39,.14);
+:root{--cream:#F5EFC6;--red:#4D0E12;--blue:#A5BCD6;--soil:#4A2E27;--brown:#231815;--white:#FFFDF4;--muted:#89786A;--border:rgba(74,46,39,.14)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--brown);font-family:"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;flex-shrink:0;background:var(--brown);color:var(--cream);padding:30px 17px;display:flex;flex-direction:column}
+.brand{font:29px Georgia,serif;letter-spacing:-1px;margin:0 0 5px 7px}
+.tagline{font-size:10px;letter-spacing:3px;margin:7px 7px 38px;color:var(--blue)}
+.nav{display:grid;gap:7px}
+.nav button{text-align:left;border:0;border-radius:10px;padding:13px 12px;background:transparent;color:#E7DACB;transition:.2s}
+.nav button:hover,.nav button.active{background:var(--soil);color:var(--cream)}
+.nav button span{display:inline-block;width:28px}
+.side-bottom{margin-top:auto;padding:25px 7px 0;color:var(--blue);font:italic 16px/1.6 Georgia,serif}
+main{flex:1;min-width:0;padding:29px 34px 40px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:27px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--soil);text-transform:uppercase}
+.profile{font-size:13px;color:var(--soil)}
+.hero{display:grid;grid-template-columns:1.5fr .8fr;gap:24px;align-items:center;margin-bottom:28px}
+h1{font:56px/1.05 Georgia,serif;letter-spacing:-2px;margin:10px 0}
+.hero p{color:var(--soil);line-height:1.7;max-width:520px}
+.quote{border-left:2px solid var(--red);padding:12px 18px;color:var(--soil);font:italic 19px/1.5 Georgia,serif}
+.panel,.stat{border:1px solid var(--border);border-radius:12px;padding:20px;min-width:0}
+.panel{background:rgba(255,253,244,.48)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.stat{background:var(--white)}
+.stat:nth-child(1){background:#F0E5B9}
+.stat:nth-child(2){background:var(--blue)}
+.stat:nth-child(3){background:#CBB09D}
+.stat:nth-child(4){background:var(--soil);color:var(--cream)}
+.stat-label{font-size:12px;line-height:1.5}
+.stat-number{font:31px Georgia,serif;margin:15px 0 8px;overflow-wrap:anywhere}
+.stat-note{font-size:11px;opacity:.78}
+.dashboard{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start}
+h2{font:24px Georgia,serif;margin:0 0 18px}
+h3{font:19px Georgia,serif;margin:0 0 15px}
+.chart-panel{min-height:300px}
+.chart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;margin-top:12px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.red-dot{background:var(--red)}
+.blue-dot{background:#7198C0}
+.right-column{display:grid;gap:18px}
+.alert{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--border)}
+.alert:last-child{border-bottom:0}
+.alert strong{font-size:13px;font-weight:600}
+.alert small{display:block;color:var(--muted);margin-top:5px}
+.pill{background:#E9CFCA;color:var(--red);border-radius:20px;padding:5px 9px;font-size:10px;white-space:nowrap}
+.pill.safe{background:#D9E6F1;color:#294B70}
+.actions{display:grid;gap:9px}
+.btn{border-radius:8px;border:1px solid var(--red);padding:12px 14px;background:transparent;color:var(--red);text-align:left}
+.btn.primary{background:var(--red);color:var(--white)}
+.btn.blue{background:var(--blue);border-color:var(--blue);color:var(--brown)}
+.btn:hover{filter:brightness(.96)}
+.investigator{margin-top:18px;background:var(--blue);border-radius:12px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.investigator h2{margin-bottom:8px}
+.investigator p{font-size:13px;line-height:1.6;margin:0}
+.investigator .btn{min-width:160px}
+.view{display:none}
+.view.active{display:block}
+.form-panel{max-width:980px}
+.field{display:grid;gap:7px;margin:16px 0}
+.field label{font-size:13px;color:var(--soil)}
+.field input,.field select{width:100%;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--brown);padding:12px}
+.result{margin-top:20px;padding:18px;border-radius:10px;background:var(--blue);line-height:1.7;overflow-wrap:anywhere}
+.result.high{background:#E9CFCA}
+.result h3{margin-bottom:8px}
+.notice{color:var(--muted);font-size:12px;line-height:1.6}
+.section-title{margin-bottom:22px}
+.footer{font-size:11px;color:var(--muted);text-align:center;margin-top:28px}
+.upload-box{margin:20px 0;padding:34px 20px;text-align:center;background:var(--white);border:2px dashed var(--blue);border-radius:16px;transition:background .2s,border-color .2s}
+.upload-box.dragover{background:var(--cream);border-color:var(--red)}
+.upload-icon{font-size:38px;margin-bottom:12px}
+.upload-box h3{margin:8px 0;color:var(--soil)}
+.upload-box p{color:var(--muted);font-size:13px;line-height:1.6}
+.upload-box input[type=file]{display:block;max-width:100%;margin:18px auto 0}
+.upload-status{margin-top:16px;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.upload-status.error{color:var(--red)}
+.upload-status.success{color:#285638}
+.results-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}
+.results-summary .stat{min-width:0}
+.table-wrap{width:100%;overflow-x:auto}
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th,.results-table td{padding:12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.results-table th{background:var(--cream);color:var(--soil)}
+.results-table tr:hover td{background:rgba(165,188,214,.12)}
+.result-label{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.result-label.fraud{background:#F3DCDD;color:var(--red)}
+.result-label.legitimate{background:#DCEBDD;color:#285638}
+.hidden{display:none!important}
+.empty{padding:14px 0;color:var(--muted);font-size:13px;line-height:1.6}
+@media(max-width:1050px){
+.sidebar{width:205px}
+main{padding:24px 20px}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hero{grid-template-columns:1fr}
+.quote{display:none}
 }
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--cream);
-  color: var(--brown);
-  font-family: "Segoe UI", Arial, sans-serif;
-}
-
-button, input, select { font: inherit; }
-button { cursor: pointer; }
-
-.app { display: flex; min-height: 100vh; }
-
-.sidebar {
-  width: 245px;
-  flex-shrink: 0;
-  background: var(--brown);
-  color: var(--cream);
-  padding: 30px 17px;
-  display: flex;
-  flex-direction: column;
-}
-
-.brand {
-  font: 29px Georgia, serif;
-  letter-spacing: -1px;
-  margin: 0 0 5px 7px;
-}
-
-.tagline {
-  font-size: 10px;
-  letter-spacing: 3px;
-  margin: 7px 7px 38px;
-  color: var(--blue);
-}
-
-.nav { display: grid; gap: 7px; }
-
-.nav button {
-  text-align: left;
-  border: 0;
-  border-radius: 10px;
-  padding: 13px 12px;
-  background: transparent;
-  color: #E7DACB;
-  transition: .2s;
-}
-
-.nav button:hover, .nav button.active {
-  background: var(--soil);
-  color: var(--cream);
-}
-
-.nav button span {
-  display: inline-block;
-  width: 28px;
-}
-
-.side-bottom {
-  margin-top: auto;
-  padding: 25px 7px 0;
-  color: var(--blue);
-  font: italic 16px/1.6 Georgia, serif;
-}
-
-main {
-  flex: 1;
-  min-width: 0;
-  padding: 29px 34px 40px;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 27px;
-}
-
-.eyebrow {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--soil);
-  text-transform: uppercase;
-}
-
-.profile { font-size: 13px; color: var(--soil); }
-
-.hero {
-  display: grid;
-  grid-template-columns: 1.5fr .8fr;
-  gap: 24px;
-  align-items: center;
-  margin-bottom: 28px;
-}
-
-h1 {
-  font: 56px/1.05 Georgia, serif;
-  letter-spacing: -2px;
-  margin: 10px 0;
-}
-
-.hero p {
-  color: var(--soil);
-  line-height: 1.7;
-  max-width: 520px;
-}
-
-.quote {
-  border-left: 2px solid var(--red);
-  padding: 12px 18px;
-  color: var(--soil);
-  font: italic 19px/1.5 Georgia, serif;
-}
-
-.panel, .stat {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  min-width: 0;
-}
-
-.panel { background: rgba(255,253,244,.48); }
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.stat { background: var(--white); }
-.stat:nth-child(1) { background: #F0E5B9; }
-.stat:nth-child(2) { background: var(--blue); }
-.stat:nth-child(3) { background: #CBB09D; }
-.stat:nth-child(4) { background: var(--soil); color: var(--cream); }
-
-.stat-label { font-size: 12px; line-height: 1.5; }
-.stat-number { font: 31px Georgia, serif; margin: 15px 0 8px; }
-.stat-note { font-size: 11px; opacity: .78; }
-
-.dashboard {
-  display: grid;
-  grid-template-columns: 1.55fr 1fr;
-  gap: 18px;
-  align-items: start;
-}
-
-h2 { font: 24px Georgia, serif; margin: 0 0 18px; }
-h3 { font: 19px Georgia, serif; margin: 0 0 15px; }
-
-.chart-panel { min-height: 300px; }
-.chart { width: 100%; height: auto; display: block; }
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  font-size: 12px;
-  margin-top: 12px;
-}
-
-.dot {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  margin-right: 6px;
-}
-
-.red-dot { background: var(--red); }
-.blue-dot { background: #7198C0; }
-
-.right-column { display: grid; gap: 18px; }
-
-.alert {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.alert:last-child { border-bottom: 0; }
-.alert strong { font-size: 13px; font-weight: 600; }
-
-.alert small {
-  display: block;
-  color: var(--muted);
-  margin-top: 5px;
-  line-height: 1.5;
-}
-
-.pill {
-  background: #E9CFCA;
-  color: var(--red);
-  border-radius: 20px;
-  padding: 5px 9px;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.pill.safe { background: #D9E6F1; color: #294B70; }
-
-.actions { display: grid; gap: 9px; }
-
-.btn {
-  border-radius: 8px;
-  border: 1px solid var(--red);
-  padding: 12px 14px;
-  background: transparent;
-  color: var(--red);
-  text-align: left;
-}
-
-.btn.primary { background: var(--red); color: var(--white); }
-.btn.blue { background: var(--blue); border-color: var(--blue); color: var(--brown); }
-.btn:hover { filter: brightness(.96); }
-
-.btn:disabled { opacity: .6; cursor: wait; }
-
-.investigator {
-  margin-top: 18px;
-  background: var(--blue);
-  border-radius: 12px;
-  padding: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-}
-
-.investigator h2 { margin-bottom: 8px; }
-.investigator p { font-size: 13px; line-height: 1.6; margin: 0; }
-.investigator .btn { min-width: 160px; }
-
-.view { display: none; }
-.view.active { display: block; }
-
-.form-panel { max-width: 760px; }
-
-.field { display: grid; gap: 7px; margin: 16px 0; }
-.field label { font-size: 13px; color: var(--soil); }
-
-.field input, .field select {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--white);
-  color: var(--brown);
-  padding: 12px;
-}
-
-.result {
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 10px;
-  background: var(--blue);
-  line-height: 1.8;
-  overflow-wrap: anywhere;
-}
-
-.result.high { background: #E9CFCA; }
-.result.medium { background: #EBDDB8; }
-.result h3 { margin-bottom: 8px; }
-.result p { margin-bottom: 0; }
-
-.notice {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.section-title { margin-bottom: 22px; }
-
-.footer {
-  font-size: 11px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 28px;
-}
-
-.status-message { font-size: 12px; margin-top: 10px; }
-.status-message.error { color: var(--red); }
-.status-message.success { color: #294B45; }
-
-@media (max-width: 1050px) {
-  .sidebar { width: 205px; }
-  main { padding: 24px 20px; }
-  .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .hero { grid-template-columns: 1fr; }
-  .quote { display: none; }
-}
-
-@media (max-width: 700px) {
-  .app { display: block; }
-  .sidebar { width: 100%; padding: 18px; }
-  .brand { font-size: 25px; }
-  .tagline { margin-bottom: 18px; }
-  .nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .nav button { padding: 10px; font-size: 12px; }
-  .side-bottom { display: none; }
-  main { padding: 22px 15px; }
-  h1 { font-size: 42px; }
-  .dashboard { grid-template-columns: 1fr; }
-  .investigator { align-items: flex-start; flex-direction: column; }
-  .stats { gap: 9px; }
-  .stat { padding: 14px; }
-  .stat-number { font-size: 26px; }
-  .profile { font-size: 11px; }
+@media(max-width:700px){
+.app{display:block}
+.sidebar{width:100%;padding:18px}
+.brand{font-size:25px}
+.tagline{margin-bottom:18px}
+.nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+.nav button{padding:10px;font-size:12px}
+.side-bottom{display:none}
+main{padding:22px 15px}
+h1{font-size:42px}
+.dashboard{grid-template-columns:1fr}
+.investigator{align-items:flex-start;flex-direction:column}
+.stats{gap:9px}
+.stat{padding:14px}
+.stat-number{font-size:26px}
+.profile{font-size:11px}
+.results-summary{grid-template-columns:1fr}
 }
 </style>
 </head>
-
 <body>
 <div class="app">
+<aside class="sidebar">
+  <div class="brand">FraudLens AI ✦</div>
+  <div class="tagline">DETECT · ANALYZE · PREVENT</div>
+  <nav class="nav" aria-label="Main navigation">
+    <button class="active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+    <button data-view="analysis"><span>▤</span> Transaction Analysis</button>
+    <button data-view="investigator"><span>✳</span> AI Investigator</button>
+    <button data-view="knowledge"><span>▧</span> RAG Knowledge Base</button>
+    <button data-view="reports"><span>▥</span> Reports</button>
+  </nav>
+  <div class="side-bottom">Smarter insights.<br>Safer transactions.<br><br>────────</div>
+</aside>
 
-  <aside class="sidebar">
-    <div class="brand">FraudLens AI ✦</div>
-    <div class="tagline">DETECT · ANALYZE · PREVENT</div>
+<main>
+  <div class="topbar">
+    <div class="eyebrow">Financial intelligence workspace</div>
+    <div class="profile">◉ &nbsp; Fraud Intelligence Workspace</div>
+  </div>
 
-    <nav class="nav">
-      <button class="active" data-view="dashboard"><span>⌂</span> Dashboard</button>
-      <button data-view="analysis"><span>▤</span> Transaction Analysis</button>
-      <button data-view="investigator"><span>✳</span> AI Investigator</button>
-      <button data-view="knowledge"><span>▧</span> RAG Knowledge Base</button>
-      <button data-view="reports"><span>▥</span> Reports</button>
-    </nav>
-
-    <div class="side-bottom">
-      Smarter insights.<br>
-      Safer transactions.<br><br>
-      ────────
+  <section class="view active" id="dashboard">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Your fraud intelligence workspace</div>
+        <h1>FraudLens AI</h1>
+        <p>Review transactions and find activity that may need a closer look.</p>
+      </div>
+      <div class="quote">“Not just transactions,<br>but trust.”</div>
     </div>
-  </aside>
 
-  <main>
-    <div class="topbar">
-      <div class="eyebrow">Financial intelligence workspace</div>
-      <div class="profile">◉ &nbsp; FraudLens AI</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">⚠ &nbsp; Fraud Detected</div>
+        <div class="stat-number" id="fraud-count">—</div>
+        <div class="stat-note">From your latest uploaded file</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">✓ &nbsp; Legitimate Transactions</div>
+        <div class="stat-number" id="legit-count">—</div>
+        <div class="stat-note">From your latest uploaded file</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">↗ &nbsp; Transaction Amount</div>
+        <div class="stat-number" id="amount-total">—</div>
+        <div class="stat-note">Total amount in the analyzed file</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">◷ &nbsp; Model Status</div>
+        <div class="stat-number" id="model-status" style="font-size:25px">Not connected</div>
+        <div class="stat-note" id="model-note">Start the Python backend to analyze files</div>
+      </div>
     </div>
 
-    <!-- DASHBOARD -->
-    <section class="view active" id="dashboard">
-      <div class="hero">
-        <div>
-          <div class="eyebrow">Your fraud intelligence workspace</div>
-          <h1>FraudLens AI</h1>
-          <p>Investigate suspicious transactions with machine learning and retrieval-augmented AI guidance.</p>
+    <div class="dashboard">
+      <div class="panel chart-panel">
+        <h2>Investigation Overview</h2>
+        <svg class="chart" viewBox="0 0 500 210" role="img" aria-label="Illustrative risk overview">
+          <g stroke="#4A2E27" stroke-opacity=".12">
+            <line x1="48" y1="30" x2="480" y2="30"/>
+            <line x1="48" y1="75" x2="480" y2="75"/>
+            <line x1="48" y1="120" x2="480" y2="120"/>
+            <line x1="48" y1="165" x2="480" y2="165"/>
+          </g>
+          <g fill="#89786A" font-size="10">
+            <text x="8" y="34">High</text>
+            <text x="8" y="79">Med</text>
+            <text x="8" y="124">Low</text>
+            <text x="8" y="169">—</text>
+            <text x="48" y="193">Review</text>
+            <text x="400" y="193">Transactions →</text>
+          </g>
+          <path d="M48 120 L105 92 L160 108 L215 65 L270 82 L325 48 L380 76 L435 36 L480 57" fill="none" stroke="#7198C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M48 153 L105 147 L160 157 L215 142 L270 151 L325 145 L380 159 L435 138 L480 150" fill="none" stroke="#4D0E12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="legend">
+          <span><i class="dot blue-dot"></i>Activity</span>
+          <span><i class="dot red-dot"></i>Risk indicator</span>
         </div>
-        <div class="quote">“Not just transactions,<br>but trust.”</div>
+        <p class="notice">Illustration only. Upload a file to see actual model results.</p>
       </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-label">⚠ &nbsp; Fraud Predictions</div>
-          <div class="stat-number" id="fraud-count">—</div>
-          <div class="stat-note">From your analyses</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">✓ &nbsp; Legitimate Predictions</div>
-          <div class="stat-number" id="legitimate-count">—</div>
-          <div class="stat-note">From your analyses</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">↗ &nbsp; Last Transaction Amount</div>
-          <div class="stat-number" id="last-amount">—</div>
-          <div class="stat-note">Dataset amount</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">◷ &nbsp; Model Status</div>
-          <div class="stat-number" id="model-status" style="font-size:25px">Checking…</div>
-          <div class="stat-note" id="model-note">Connecting to local API</div>
-        </div>
-      </div>
-
-      <div class="dashboard">
-        <div class="panel chart-panel">
-          <h2>Investigation Overview</h2>
-          <svg class="chart" viewBox="0 0 500 210" role="img" aria-label="Illustrative transaction chart">
-            <g stroke="#4A2E27" stroke-opacity=".12">
-              <line x1="48" y1="30" x2="480" y2="30"/>
-              <line x1="48" y1="75" x2="480" y2="75"/>
-              <line x1="48" y1="120" x2="480" y2="120"/>
-              <line x1="48" y1="165" x2="480" y2="165"/>
-            </g>
-            <g fill="#89786A" font-size="10">
-              <text x="8" y="34">High</text>
-              <text x="8" y="79">Med</text>
-              <text x="8" y="124">Low</text>
-              <text x="48" y="193">Illustration</text>
-              <text x="400" y="193">Timeline →</text>
-            </g>
-            <path d="M48 120 L105 92 L160 108 L215 65 L270 82 L325 48 L380 76 L435 36 L480 57"
-              fill="none" stroke="#7198C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M48 153 L105 147 L160 157 L215 142 L270 151 L325 145 L380 159 L435 138 L480 150"
-              fill="none" stroke="#4D0E12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <div class="legend">
-            <span><i class="dot blue-dot"></i>Transaction activity (illustrative)</span>
-            <span><i class="dot red-dot"></i>Risk indicator (illustrative)</span>
-          </div>
-          <p class="notice">Chart is illustrative and is not a live dataset visualization.</p>
-        </div>
-
-        <div class="right-column">
-          <div class="panel">
-            <h3>Recent Investigations</h3>
-            <div id="recent-list">
-              <p class="notice">Analyze a transaction to start your history.</p>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h3>Quick Actions</h3>
-            <div class="actions">
-              <button class="btn primary" data-go="analysis">＋ &nbsp; Analyze Transaction</button>
-              <button class="btn" data-go="investigator">✳ &nbsp; Open AI Investigator</button>
-              <button class="btn blue" data-go="knowledge">▧ &nbsp; View RAG Guidance</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="investigator">
-        <div>
-          <h2>AI Investigator</h2>
-          <p>Review a dataset transaction, assess its risk, and explore fraud-prevention guidance.</p>
-        </div>
-        <button class="btn primary" data-go="investigator">Start Investigation →</button>
-      </div>
-    </section>
-
-    <!-- TRANSACTION ANALYSIS -->
-    <section class="view" id="analysis">
-      <div class="section-title">
-        <div class="eyebrow">Transaction intelligence</div>
-        <h1>Transaction Analysis</h1>
-        <p>Select a transaction from your dataset. The trained model will calculate the fraud probability.</p>
-      </div>
-
-      <div class="panel form-panel">
-        <h2>Analyze a Transaction</h2>
-
-        <form id="analysis-form">
-          <div class="field">
-            <label for="transaction-select">Select a dataset transaction</label>
-            <select id="transaction-select" required>
-              <option value="">Loading transactions…</option>
-            </select>
-          </div>
-
-          <p class="notice" id="transaction-info">
-            Transaction choices will load from the Python backend.
-          </p>
-
-          <button class="btn primary" id="analyze-button" type="submit">
-            Analyze with Random Forest →
-          </button>
-          <div id="connection-message" class="status-message" role="status"></div>
-        </form>
-
-        <div id="analysis-result" aria-live="polite"></div>
-
-        <p class="notice">
-          Uses the trained Random Forest model on the credit card benchmark dataset.
-          Results describe historical dataset transactions, not live payments.
-        </p>
-      </div>
-    </section>
-
-    <!-- AI INVESTIGATOR -->
-    <section class="view" id="investigator">
-      <div class="section-title">
-        <div class="eyebrow">Investigation workspace</div>
-        <h1>AI Investigator</h1>
-        <p>Review model results and their dataset labels.</p>
-      </div>
-
-      <div class="panel form-panel">
-        <h2>Investigation Summary</h2>
-        <p>Run a transaction analysis first. Its latest result will appear here.</p>
-        <button class="btn primary" data-go="analysis">Go to Transaction Analysis →</button>
-        <div id="investigator-result" class="result" style="display:none"></div>
-        <p class="notice">
-          This version displays model-based results. Retrieval-augmented guidance
-          will require a separate connection to the RAG pipeline.
-        </p>
-      </div>
-    </section>
-
-    <!-- KNOWLEDGE BASE -->
-    <section class="view" id="knowledge">
-      <div class="section-title">
-        <div class="eyebrow">Retrieval-augmented generation</div>
-        <h1>RAG Knowledge Base</h1>
-        <p>General fraud-prevention reference information.</p>
-      </div>
-
-      <div class="dashboard">
+      <div class="right-column">
         <div class="panel">
-          <h2>Fraud Indicators</h2>
-          <p>Potential signals include unusual transaction patterns, unexpected transaction values, repeated attempts, and activity that differs from an established baseline.</p>
-          <p class="notice">General guidance, not live retrieval results.</p>
+          <h2>Recent Analysis</h2>
+          <div id="recent-list" class="empty">No files analyzed yet.</div>
         </div>
         <div class="panel">
-          <h2>Transaction Monitoring</h2>
-          <p>Review high-risk alerts, examine relevant context, and use additional verification before consequential decisions.</p>
-          <p class="notice">General guidance, not live retrieval results.</p>
+          <h2>Quick Actions</h2>
+          <div class="actions">
+            <button class="btn primary" data-go="analysis">Analyze transactions →</button>
+            <button class="btn" data-go="investigator">Open AI Investigator →</button>
+            <button class="btn blue" data-go="knowledge">Explore fraud guidance →</button>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- REPORTS -->
-    <section class="view" id="reports">
-      <div class="section-title">
-        <div class="eyebrow">Review and documentation</div>
-        <h1>Reports</h1>
-        <p>Review the transactions analyzed in this browser session.</p>
+    <div class="investigator">
+      <div>
+        <h2>Need a closer look?</h2>
+        <p>Review model predictions and use fraud-monitoring guidance to decide which transactions need further investigation.</p>
+      </div>
+      <button class="btn" data-go="analysis">Start analysis →</button>
+    </div>
+  </section>
+
+  <section class="view" id="analysis">
+    <div class="section-title">
+      <div class="eyebrow">Machine learning workspace</div>
+      <h1>Transaction Analysis</h1>
+      <p>Upload a transaction dataset and review the backend model's predictions.</p>
+    </div>
+
+    <div class="panel form-panel">
+      <h2>Upload your transaction file</h2>
+      <p>Choose a CSV or XLSX file. The file will be sent to your FastAPI backend for analysis.</p>
+      <div class="upload-box" id="upload-box">
+        <div class="upload-icon">⇧</div>
+        <h3>Drop your file here</h3>
+        <p>or select a file from your computer</p>
+        <input type="file" id="file-input" accept=".csv,.xlsx">
+        <div class="upload-status" id="upload-status">No file selected.</div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="analyze-button" type="button">Analyze file →</button>
+        <button class="btn" id="download-button" type="button" disabled>↓ Download results CSV</button>
+      </div>
+      <div class="result hidden" id="analysis-error" role="alert"></div>
+
+      <div class="results-panel hidden" id="results-panel">
+        <h2>Analysis Results</h2>
+        <div id="results-summary" class="results-summary"></div>
+        <div class="table-wrap">
+          <table class="results-table">
+            <thead id="results-head"></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <p class="notice" id="results-note"></p>
       </div>
 
+      <p class="notice">Your model expects Time, V1–V28 and Amount. Standard bank exports without these model features cannot be analyzed directly unless a feature-processing step is added.</p>
+    </div>
+  </section>
+
+  <section class="view" id="investigator">
+    <div class="section-title">
+      <div class="eyebrow">Investigation workspace</div>
+      <h1>AI Investigator</h1>
+      <p>Use model output as a starting point for further review.</p>
+    </div>
+    <div class="panel form-panel">
+      <h2>Investigation Notes</h2>
+      <p>Upload a dataset in Transaction Analysis first. After analysis, the latest summary and flagged rows will be available here.</p>
+      <button class="btn primary" data-go="analysis">Go to Transaction Analysis →</button>
+      <div id="investigator-result" class="result hidden"></div>
+      <p class="notice">Model predictions are decision support, not proof of fraud. Review suspicious activity before taking action.</p>
+    </div>
+  </section>
+
+  <section class="view" id="knowledge">
+    <div class="section-title">
+      <div class="eyebrow">Fraud reference material</div>
+      <h1>RAG Knowledge Base</h1>
+      <p>General guidance for reviewing potentially suspicious activity.</p>
+    </div>
+    <div class="dashboard">
       <div class="panel">
-        <h2>Investigation History</h2>
-        <div id="report-list">No reports generated yet.</div>
-        <p class="notice">
-          This history is kept in the current browser session only.
-          It is not saved to a database.
-        </p>
+        <h2>Fraud Indicators</h2>
+        <p>Signals can include unusual transaction patterns, unexpected transaction values, repeated attempts, and activity that differs from an established baseline.</p>
+        <p class="notice">Reference: <code>fraud_indicators.txt</code></p>
       </div>
-    </section>
-
-    <div class="footer">
-      FraudLens AI · Machine learning + RAG · Decision support, not a substitute for human review
+      <div class="panel">
+        <h2>Transaction Monitoring</h2>
+        <p>Review high-risk alerts, check surrounding activity, and use additional verification before making consequential decisions.</p>
+        <p class="notice">Reference: <code>transaction_monitoring.txt</code></p>
+      </div>
     </div>
-  </main>
+    <p class="notice">This section is general reference guidance; it is not live output from the RAG retrieval pipeline.</p>
+  </section>
+
+  <section class="view" id="reports">
+    <div class="section-title">
+      <div class="eyebrow">Review and documentation</div>
+      <h1>Reports</h1>
+      <p>Files analyzed during this browser session appear here.</p>
+    </div>
+    <div class="panel">
+      <h2>Investigation History</h2>
+      <div id="report-list" class="empty">No reports generated yet.</div>
+      <p class="notice">History is kept in this browser session only and is not saved to a database.</p>
+    </div>
+  </section>
+
+  <div class="footer">FraudLens AI · Transaction analysis</div>
+</main>
 </div>
 
 <script>
-/*
-  LOCAL DEVELOPMENT CONFIGURATION
+// Local development API. For a deployed site, change this to your public backend URL.
+const API_URL = "http://127.0.0.1:8001/api/analyze-file";
 
-  The backend must be running at:
-  http://127.0.0.1:8001
-
-  This URL works only on the computer running the backend.
-*/
-const API_BASE = "http://127.0.0.1:8001";
+let selectedFile = null;
+let latestRows = [];
+let historyItems = [];
 
 const navButtons = document.querySelectorAll("[data-view]");
 const views = document.querySelectorAll(".view");
 
-function showView(name) {
-  views.forEach(view => {
-    view.classList.toggle("active", view.id === name);
-  });
-
-  navButtons.forEach(button => {
-    button.classList.toggle("active", button.dataset.view === name);
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+function showView(viewId) {
+  views.forEach(view => view.classList.toggle("active", view.id === viewId));
+  navButtons.forEach(button => button.classList.toggle("active", button.dataset.view === viewId));
 }
 
 navButtons.forEach(button => {
@@ -590,293 +347,397 @@ document.querySelectorAll("[data-go]").forEach(button => {
   button.addEventListener("click", () => showView(button.dataset.go));
 });
 
-const historyRecords = [];
-let transactions = [];
-let latestResult = null;
-
-const transactionSelect = document.getElementById("transaction-select");
-const transactionInfo = document.getElementById("transaction-info");
-const connectionMessage = document.getElementById("connection-message");
+const fileInput = document.getElementById("file-input");
+const uploadBox = document.getElementById("upload-box");
+const uploadStatus = document.getElementById("upload-status");
 const analyzeButton = document.getElementById("analyze-button");
+const downloadButton = document.getElementById("download-button");
 
-function formatAmount(value) {
-  return Number(value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+function setStatus(message, type = "") {
+  uploadStatus.textContent = message;
+  uploadStatus.className = "upload-status" + (type ? " " + type : "");
+}
+
+function chooseFile(file) {
+  if (!file) return;
+
+  const ext = file.name.toLowerCase().split(".").pop();
+
+  if (!["csv", "xlsx"].includes(ext)) {
+    selectedFile = null;
+    fileInput.value = "";
+    setStatus("Please choose a .csv or .xlsx file.", "error");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    selectedFile = null;
+    fileInput.value = "";
+    setStatus("This file is larger than 5 MB. Choose a smaller file.", "error");
+    return;
+  }
+
+  selectedFile = file;
+  setStatus(`Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB). Click Analyze file when ready.`);
+  document.getElementById("analysis-error").classList.add("hidden");
+}
+
+fileInput.addEventListener("change", () => chooseFile(fileInput.files[0]));
+
+["dragenter", "dragover"].forEach(eventName => {
+  uploadBox.addEventListener(eventName, event => {
+    event.preventDefault();
+    uploadBox.classList.add("dragover");
   });
-}
+});
 
-function setConnectionMessage(message, isError = false) {
-  connectionMessage.textContent = message;
-  connectionMessage.className =
-    "status-message " + (isError ? "error" : "success");
-}
+["dragleave", "drop"].forEach(eventName => {
+  uploadBox.addEventListener(eventName, event => {
+    event.preventDefault();
+    uploadBox.classList.remove("dragover");
+  });
+});
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
+uploadBox.addEventListener("drop", event => {
+  chooseFile(event.dataTransfer.files[0]);
+});
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
+    "\"": "&quot;",
+    "'": "&#39;"
+  }[char]));
 }
 
-async function checkBackend() {
-  const status = document.getElementById("model-status");
-  const note = document.getElementById("model-note");
-
-  try {
-    const response = await fetch(`${API_BASE}/`);
-
-    if (!response.ok) {
-      throw new Error("Backend health check failed.");
+function firstValue(obj, keys) {
+  for (const key of keys) {
+    if (obj && obj[key] !== undefined && obj[key] !== null) {
+      return obj[key];
     }
-
-    const data = await response.json();
-
-    status.textContent = data.model_loaded ? "Connected" : "Unavailable";
-    note.textContent = `${Number(data.dataset_rows).toLocaleString()} dataset rows`;
-  } catch (error) {
-    status.textContent = "Offline";
-    note.textContent = "Start the Python backend on port 8001";
   }
+  return undefined;
 }
 
-async function loadTransactions() {
-  transactionSelect.innerHTML = '<option value="">Loading transactions…</option>';
-  transactionSelect.disabled = true;
+function normalizePredictionValue(raw) {
+  if (raw === 1 || raw === true) return "Fraud";
+  if (raw === 0 || raw === false) return "Legitimate";
 
-  try {
-    const response = await fetch(`${API_BASE}/api/transactions?limit=20`);
+  const value = String(raw ?? "").trim().toLowerCase();
 
-    if (!response.ok) {
-      throw new Error(`Could not load transactions (HTTP ${response.status}).`);
-    }
-
-    const data = await response.json();
-    transactions = data.transactions || [];
-
-    if (transactions.length === 0) {
-      throw new Error("The backend returned no transactions.");
-    }
-
-    transactionSelect.innerHTML =
-      '<option value="">Choose a transaction…</option>' +
-      transactions.map(transaction => `
-        <option value="${transaction.row_number}">
-          Row ${transaction.row_number} · Amount ${formatAmount(transaction.amount)}
-        </option>
-      `).join("");
-
-    transactionSelect.disabled = false;
-    transactionInfo.textContent =
-      `Loaded ${transactions.length} sample transactions from your dataset.`;
-
-    setConnectionMessage("Backend connected. Select a transaction to begin.");
-  } catch (error) {
-    transactionSelect.innerHTML =
-      '<option value="">Unable to load transactions</option>';
-
-    transactionInfo.textContent =
-      "The backend could not provide transaction choices.";
-
-    setConnectionMessage(
-      `${error.message} Make sure your backend is running at ${API_BASE}.`,
-      true
-    );
+  if (["1", "fraud", "fraudulent", "suspicious", "true"].includes(value) || value.includes("fraud")) {
+    return "Fraud";
   }
+
+  if (["0", "legitimate", "legit", "normal", "genuine", "false"].includes(value) || value.includes("legit")) {
+    return "Legitimate";
+  }
+
+  return "Uncertain";
 }
 
-transactionSelect.addEventListener("change", () => {
-  const selected = transactions.find(
-    transaction => transaction.row_number === Number(transactionSelect.value)
-  );
+// Normalize every result so the dashboard and table use the same prediction.
+function normalizeResults(data) {
+  let rows = Array.isArray(data)
+    ? data
+    : firstValue(data, ["results", "predictions", "data", "transactions"]);
 
-  if (selected) {
-    transactionInfo.textContent =
-      `Selected row ${selected.row_number}. Dataset amount: ${formatAmount(selected.amount)}. ` +
-      `Actual dataset label: ${selected.dataset_label}.`;
-  }
-});
+  if (!Array.isArray(rows)) return null;
 
-document.getElementById("analysis-form").addEventListener("submit", async event => {
-  event.preventDefault();
+  return rows.map((source, index) => {
+    const row = (typeof source === "object" && source !== null)
+      ? { ...source }
+      : { row: index + 1, prediction: String(source) };
 
-  const rowNumber = Number(transactionSelect.value);
+    let probability = Number(firstValue(row, [
+      "fraud_probability",
+      "fraud_prob",
+      "probability_fraud",
+      "risk_probability",
+      "probability"
+    ]));
 
-  if (!rowNumber) {
-    setConnectionMessage("Please select a transaction first.", true);
+    if (!Number.isFinite(probability)) {
+      probability = null;
+    } else if (probability >= 0 && probability <= 1) {
+      probability *= 100;
+    }
+
+    if (probability !== null && probability >= 0 && probability <= 100) {
+      row.fraud_probability = Number(probability.toFixed(2));
+
+      // Keep prediction, class, and risk consistent with the probability.
+      row.prediction = probability >= 50 ? "Fraud" : "Legitimate";
+      row.predicted_class = probability >= 50 ? 1 : 0;
+      row.risk_level =
+        probability >= 80 ? "HIGH" :
+        probability >= 50 ? "MEDIUM" : "LOW";
+    } else {
+      const rawPrediction = firstValue(row, [
+        "prediction",
+        "predicted_label",
+        "predicted_class",
+        "label",
+        "class",
+        "result",
+        "status",
+        "fraud_prediction"
+      ]);
+
+      row.prediction = normalizePredictionValue(rawPrediction);
+      row.predicted_class =
+        row.prediction === "Fraud" ? 1 :
+        row.prediction === "Legitimate" ? 0 : null;
+
+      if (!row.risk_level && row.risk) {
+        row.risk_level = String(row.risk).toUpperCase();
+      }
+    }
+
+    if (row.row === undefined &&
+        row.row_number === undefined &&
+        row.transaction_number === undefined) {
+      row.row = index + 1;
+    }
+
+    return row;
+  });
+}
+
+function predictionOf(row) {
+  // Use the normalized prediction, not a stale raw class field.
+  return normalizePredictionValue(row.prediction);
+}
+
+function money(value) {
+  const n = Number(value);
+  return Number.isFinite(n)
+    ? n.toLocaleString(undefined, { maximumFractionDigits: 2 })
+    : "—";
+}
+
+function renderResults(data, rows) {
+  latestRows = rows;
+
+  // All dashboard counts are calculated from the exact normalized rows
+  // displayed in the results table.
+  const fraud = rows.filter(row => predictionOf(row) === "Fraud").length;
+  const legit = rows.filter(row => predictionOf(row) === "Legitimate").length;
+
+  const amountSum = rows.reduce((sum, row) => {
+    const value = Number(firstValue(row, ["Amount", "amount", "transaction_amount"]));
+    return sum + (Number.isFinite(value) ? value : 0);
+  }, 0);
+
+  document.getElementById("results-summary").innerHTML = `
+    <div class="stat">
+      <div class="stat-label">Fraud predictions</div>
+      <div class="stat-number">${fraud}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Legitimate predictions</div>
+      <div class="stat-number">${legit}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Rows analyzed</div>
+      <div class="stat-number">${rows.length}</div>
+    </div>
+  `;
+
+  document.getElementById("fraud-count").textContent = fraud;
+  document.getElementById("legit-count").textContent = legit;
+  document.getElementById("amount-total").textContent = money(amountSum);
+  document.getElementById("model-status").textContent = "Connected";
+  document.getElementById("model-note").textContent = "Latest file analyzed";
+
+  const columns = [...new Set(rows.flatMap(row => Object.keys(row)))];
+  const preferred = [
+    "row", "row_number", "transaction_number", "Time", "Amount",
+    "prediction", "predicted_label", "predicted_class",
+    "fraud_probability", "risk_level", "probability", "risk", "status"
+  ];
+
+  columns.sort((a, b) => {
+    const ai = preferred.indexOf(a);
+    const bi = preferred.indexOf(b);
+    return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+  });
+
+  const shown = columns.slice(0, 8);
+
+  document.getElementById("results-head").innerHTML =
+    "<tr>" + shown.map(key =>
+      `<th>${escapeHTML(key.replaceAll("_", " "))}</th>`
+    ).join("") + "</tr>";
+
+  document.getElementById("results-body").innerHTML = rows.slice(0, 200).map(row => {
+    return "<tr>" + shown.map(key => {
+      const value = row[key] ?? "—";
+
+      if ([
+        "prediction", "predicted_label", "predicted_class",
+        "label", "class", "result", "status", "fraud_prediction"
+      ].includes(key)) {
+        const prediction = predictionOf(row);
+        const isFraud = prediction === "Fraud";
+        const cssClass = isFraud ? "fraud" :
+          prediction === "Legitimate" ? "legitimate" : "";
+
+        return `<td><span class="result-label ${cssClass}">${escapeHTML(prediction)}</span></td>`;
+      }
+
+      if (key === "fraud_probability" && Number.isFinite(Number(value))) {
+        return `<td>${escapeHTML(Number(value).toFixed(2))}%</td>`;
+      }
+
+      return `<td>${escapeHTML(typeof value === "number" ? money(value) : value)}</td>`;
+    }).join("") + "</tr>";
+  }).join("");
+
+  document.getElementById("results-note").textContent =
+    rows.length > 200
+      ? `Showing first 200 of ${rows.length} returned rows. Download the CSV for the full response.`
+      : `${rows.length} row(s) returned by the backend. Review flagged activity before taking action.`;
+
+  document.getElementById("results-panel").classList.remove("hidden");
+  downloadButton.disabled = rows.length === 0;
+
+  const fileName = selectedFile?.name || "Uploaded file";
+  const item = {
+    name: fileName,
+    rows: rows.length,
+    fraud,
+    time: new Date().toLocaleTimeString()
+  };
+
+  historyItems.unshift(item);
+
+  document.getElementById("recent-list").innerHTML = historyItems.slice(0, 4).map(item => `
+    <div class="alert">
+      <div>
+        <strong>${escapeHTML(item.name)}</strong>
+        <small>${item.time} · ${item.rows} rows · ${item.fraud} fraud predictions</small>
+      </div>
+      <span class="pill">Analyzed</span>
+    </div>
+  `).join("");
+
+  document.getElementById("report-list").innerHTML = historyItems.map(item => `
+    <div class="alert">
+      <div>
+        <strong>${escapeHTML(item.name)}</strong>
+        <small>${item.time} · ${item.rows} rows · ${item.fraud} fraud predictions</small>
+      </div>
+      <span class="pill">Report</span>
+    </div>
+  `).join("");
+
+  const investigator = document.getElementById("investigator-result");
+  investigator.classList.remove("hidden");
+  investigator.innerHTML = `
+    <h3>Latest file summary</h3>
+    File: ${escapeHTML(fileName)}<br>
+    Rows returned: ${rows.length}<br>
+    Fraud predictions: ${fraud}<br>
+    Legitimate predictions: ${legit}
+    <p>These are model outputs, not confirmation of fraud.</p>
+  `;
+}
+
+analyzeButton.addEventListener("click", async () => {
+  const errorBox = document.getElementById("analysis-error");
+  errorBox.classList.add("hidden");
+
+  if (!selectedFile) {
+    setStatus("Choose a CSV or XLSX file first.", "error");
     return;
   }
+
+  const formData = new FormData();
+  formData.append("file", selectedFile);
 
   analyzeButton.disabled = true;
   analyzeButton.textContent = "Analyzing…";
-  setConnectionMessage("Sending the selected transaction to the Random Forest model…");
+  setStatus("Uploading file and waiting for model results…");
 
   try {
-    const response = await fetch(`${API_BASE}/api/analyze`, {
+    const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        row_number: rowNumber
-      })
+      body: formData
     });
 
-    const data = await response.json();
+    const contentType = response.headers.get("content-type") || "";
+    let payload;
 
-    if (!response.ok) {
-      throw new Error(data.detail || `Analysis failed (HTTP ${response.status}).`);
+    if (contentType.includes("application/json")) {
+      payload = await response.json();
+    } else {
+      payload = { detail: await response.text() };
     }
 
-    latestResult = data;
+    if (!response.ok) {
+      throw new Error(firstValue(payload, ["detail", "message", "error"]) || `Request failed (${response.status})`);
+    }
 
-    renderAnalysisResult(data);
-    addHistoryRecord(data);
-    renderDashboard();
-    renderInvestigator(data);
+    const rows = normalizeResults(payload);
 
-    setConnectionMessage("Analysis complete. Result returned by the trained model.");
+    if (!rows) {
+      throw new Error("The backend responded, but the response did not contain a results/predictions array. Check the API response format.");
+    }
+
+    renderResults(payload, rows);
+    setStatus(`Analysis complete: ${selectedFile.name}`, "success");
   } catch (error) {
-    setConnectionMessage(
-      `${error.message} Check that the backend is running and try again.`,
-      true
-    );
+    let message = error.message || "Unknown error";
+
+    if (error instanceof TypeError) {
+      message = "Could not reach the backend. Make sure FastAPI is running at http://127.0.0.1:8001 and that this page is opened in a compatible local environment.";
+    }
+
+    errorBox.textContent = message;
+    errorBox.classList.remove("hidden");
+    errorBox.classList.add("high");
+    setStatus("Analysis failed. Check the error message below.", "error");
   } finally {
     analyzeButton.disabled = false;
-    analyzeButton.textContent = "Analyze with Random Forest →";
+    analyzeButton.textContent = "Analyze file →";
   }
 });
 
-function renderAnalysisResult(data) {
-  const result = document.getElementById("analysis-result");
+downloadButton.addEventListener("click", () => {
+  if (!latestRows.length) return;
 
-  const riskClass = data.risk_level === "HIGH" ? "high" :
-                    data.risk_level === "MEDIUM" ? "medium" : "";
+  const columns = [...new Set(latestRows.flatMap(row => Object.keys(row)))];
 
-  const predictedLabel = Number(data.predicted_class) === 1
-    ? "Fraud"
-    : "Legitimate";
+  const quote = value => {
+    const text = String(value ?? "");
+    return /[",\r\n]/.test(text)
+      ? '"' + text.replace(/"/g, '""') + '"'
+      : text;
+  };
 
-  result.className = `result ${riskClass}`;
+  const csv = [
+    columns.map(quote).join(","),
+    ...latestRows.map(row => columns.map(column => quote(row[column])).join(","))
+  ].join("\r\n");
 
-  result.innerHTML = `
-    <h3>${escapeHtml(data.risk_level)} RISK · MODEL RESULT</h3>
-    <div><strong>Dataset row:</strong> ${Number(data.row_number)}</div>
-    <div><strong>Transaction amount:</strong> ${formatAmount(data.amount)} dataset units</div>
-    <div><strong>Predicted class:</strong> ${predictedLabel}</div>
-    <div><strong>Fraud probability:</strong> ${Number(data.fraud_probability).toFixed(2)}%</div>
-    <div><strong>Actual dataset label:</strong> ${escapeHtml(data.dataset_label)}</div>
-    <div><strong>Prediction matches dataset label:</strong>
-      ${data.correct_prediction ? "Yes" : "No"}
-    </div>
-    <p class="notice">${escapeHtml(data.notice || "Benchmark dataset result.")}</p>
-  `;
-}
-
-function addHistoryRecord(data) {
-  historyRecords.unshift({
-    rowNumber: data.row_number,
-    amount: data.amount,
-    probability: data.fraud_probability,
-    level: data.risk_level,
-    predictedClass: data.predicted_class,
-    datasetLabel: data.dataset_label,
-    correct: data.correct_prediction,
-    time: new Date().toLocaleTimeString()
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;"
   });
 
-  renderHistory();
-}
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
 
-function renderHistory() {
-  const recentList = document.getElementById("recent-list");
-  const reportList = document.getElementById("report-list");
+  anchor.href = url;
+  anchor.download = "fraudlens-analysis-results.csv";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
 
-  if (historyRecords.length === 0) {
-    recentList.innerHTML =
-      '<p class="notice">No investigations yet. Analyze a transaction to begin.</p>';
-
-    reportList.textContent = "No reports generated yet.";
-    return;
-  }
-
-  recentList.innerHTML = historyRecords.slice(0, 4).map(item => `
-    <div class="alert">
-      <div>
-        <strong>Dataset row ${item.rowNumber}</strong>
-        <small>${item.time} · ${item.level} risk · ${item.probability.toFixed(2)}% fraud probability</small>
-      </div>
-      <span class="pill ${item.level === "LOW" ? "safe" : ""}">
-        ${escapeHtml(item.level)}
-      </span>
-    </div>
-  `).join("");
-
-  reportList.innerHTML = historyRecords.map(item => `
-    <div class="alert">
-      <div>
-        <strong>Row ${item.rowNumber} · ${escapeHtml(item.level)} risk</strong>
-        <small>
-          Amount: ${formatAmount(item.amount)} ·
-          Fraud probability: ${item.probability.toFixed(2)}% ·
-          Predicted: ${Number(item.predictedClass) === 1 ? "Fraud" : "Legitimate"} ·
-          Actual: ${escapeHtml(item.datasetLabel)} ·
-          Match: ${item.correct ? "Yes" : "No"} ·
-          ${item.time}
-        </small>
-      </div>
-      <span class="pill ${item.level === "LOW" ? "safe" : ""}">
-        ${escapeHtml(item.level)}
-      </span>
-    </div>
-  `).join("");
-}
-
-function renderDashboard() {
-  const fraudCount = historyRecords.filter(
-    item => Number(item.predictedClass) === 1
-  ).length;
-
-  const legitimateCount = historyRecords.length - fraudCount;
-  const last = historyRecords[0];
-
-  document.getElementById("fraud-count").textContent = fraudCount;
-  document.getElementById("legitimate-count").textContent = legitimateCount;
-  document.getElementById("last-amount").textContent =
-    last ? formatAmount(last.amount) : "—";
-}
-
-function renderInvestigator(data) {
-  const result = document.getElementById("investigator-result");
-  const predictedLabel = Number(data.predicted_class) === 1
-    ? "Fraud"
-    : "Legitimate";
-
-  result.style.display = "block";
-  result.className = `result ${data.risk_level === "HIGH" ? "high" : data.risk_level === "MEDIUM" ? "medium" : ""}`;
-
-  result.innerHTML = `
-    <h3>${escapeHtml(data.risk_level)} RISK · MODEL INVESTIGATION</h3>
-    <div><strong>Dataset row:</strong> ${Number(data.row_number)}</div>
-    <div><strong>Predicted class:</strong> ${predictedLabel}</div>
-    <div><strong>Fraud probability:</strong> ${Number(data.fraud_probability).toFixed(2)}%</div>
-    <div><strong>Actual dataset label:</strong> ${escapeHtml(data.dataset_label)}</div>
-    <div><strong>Prediction correct:</strong> ${data.correct_prediction ? "Yes" : "No"}</div>
-    <p>This is a model prediction on a historical benchmark dataset, not a live payment decision.</p>
-  `;
-}
-
-async function initializeApp() {
-  await checkBackend();
-  await loadTransactions();
-  renderHistory();
-  renderDashboard();
-}
-
-initializeApp();
+  URL.revokeObjectURL(url);
+});
 </script>
 </body>
 </html>
