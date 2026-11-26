@@ -8,7 +8,9 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = PROJECT_DIR / "models" / "random_forest_model.pkl"
+MODEL_PATH = PROJECT_DIR / "models" / "random_forest_candidate.pkl"
+
+MAX_FILE_SIZE = 5 * 1024 * 1024
 
 app = FastAPI(title="FraudLens AI API")
 
@@ -23,10 +25,12 @@ app.add_middleware(
 if not MODEL_PATH.exists():
     raise FileNotFoundError(f"Model not found: {MODEL_PATH}")
 
-model = joblib.load(MODEL_PATH)
+# Load the new Random Forest model bundle
+model_bundle = joblib.load(MODEL_PATH)
 
-FEATURES = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
-MAX_FILE_SIZE = 5 * 1024 * 1024
+model = model_bundle["model"]
+THRESHOLD = float(model_bundle["threshold"])
+FEATURES = model_bundle["features"]
 
 
 @app.get("/")
@@ -35,6 +39,8 @@ def home():
         "status": "ok",
         "service": "FraudLens AI API",
         "model_loaded": True,
+        "model_type": "Random Forest",
+        "threshold": THRESHOLD,
         "supported_uploads": [".csv", ".xlsx"],
         "max_file_size_mb": 5,
     }
@@ -54,7 +60,10 @@ async def analyze_file(file: UploadFile = File(...)):
     content = await file.read(MAX_FILE_SIZE + 1)
 
     if not content:
-        raise HTTPException(status_code=400, detail="The uploaded file is empty.")
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty.",
+        )
 
     if len(content) > MAX_FILE_SIZE:
         raise HTTPException(
@@ -66,7 +75,11 @@ async def analyze_file(file: UploadFile = File(...)):
         if extension == ".csv":
             data = pd.read_csv(io.BytesIO(content))
         else:
-            data = pd.read_excel(io.BytesIO(content), engine="openpyxl")
+            data = pd.read_excel(
+                io.BytesIO(content),
+                engine="openpyxl"
+            )
+
     except Exception:
         raise HTTPException(
             status_code=400,
@@ -74,7 +87,10 @@ async def analyze_file(file: UploadFile = File(...)):
         )
 
     if data.empty:
-        raise HTTPException(status_code=400, detail="No transaction rows were found.")
+        raise HTTPException(
+            status_code=400,
+            detail="No transaction rows were found.",
+        )
 
     if len(data) > 10000:
         raise HTTPException(
@@ -82,7 +98,11 @@ async def analyze_file(file: UploadFile = File(...)):
             detail="Upload no more than 10,000 transactions at a time.",
         )
 
-    missing = [column for column in FEATURES if column not in data.columns]
+    missing = [
+        column for column in FEATURES
+        if column not in data.columns
+    ]
+
     if missing:
         raise HTTPException(
             status_code=400,
@@ -93,16 +113,25 @@ async def analyze_file(file: UploadFile = File(...)):
         )
 
     try:
-        features = data[FEATURES].apply(pd.to_numeric, errors="raise")
+        features = data[FEATURES].apply(
+            pd.to_numeric,
+            errors="raise"
+        )
 
         if features.isnull().any().any():
             raise ValueError("Missing values found.")
 
-        if not features.map(lambda value: pd.notna(value) and abs(value) != float("inf")).all().all():
+        if not features.map(
+            lambda value: pd.notna(value)
+            and abs(value) != float("inf")
+        ).all().all():
             raise ValueError("Non-finite values found.")
 
+        # Generate fraud probabilities
         probabilities = model.predict_proba(features)[:, 1]
-        predictions = (probabilities >= 0.5).astype(int)
+
+        # Apply the threshold selected during validation
+        predictions = (probabilities >= THRESHOLD).astype(int)
 
     except Exception as exc:
         raise HTTPException(
@@ -116,9 +145,10 @@ async def analyze_file(file: UploadFile = File(...)):
         probability = float(probabilities[index])
         prediction = int(predictions[index])
 
+        # Determine transaction risk level
         if probability >= 0.8:
             risk = "HIGH"
-        elif probability >= 0.5:
+        elif probability >= THRESHOLD:
             risk = "MEDIUM"
         else:
             risk = "LOW"
@@ -127,14 +157,20 @@ async def analyze_file(file: UploadFile = File(...)):
             "transaction_number": index + 1,
             "amount": float(features.iloc[index]["Amount"]),
             "predicted_class": prediction,
-            "prediction": "Fraudulent" if prediction == 1 else "Legitimate",
+            "prediction": (
+                "Fraudulent" if prediction == 1
+                else "Legitimate"
+            ),
             "fraud_probability": round(probability * 100, 2),
             "risk_level": risk,
         }
 
-        if "Class" in data.columns and pd.notna(data.iloc[index]["Class"]):
+        if "Class" in data.columns and pd.notna(
+            data.iloc[index]["Class"]
+        ):
             result["actual_dataset_label"] = (
-                "Fraudulent" if int(data.iloc[index]["Class"]) == 1
+                "Fraudulent"
+                if int(data.iloc[index]["Class"]) == 1
                 else "Legitimate"
             )
 
@@ -143,8 +179,12 @@ async def analyze_file(file: UploadFile = File(...)):
     return {
         "filename": file.filename,
         "transactions_analyzed": len(results),
-        "fraudulent_count": sum(r["predicted_class"] == 1 for r in results),
-        "legitimate_count": sum(r["predicted_class"] == 0 for r in results),
+        "fraudulent_count": sum(
+            r["predicted_class"] == 1 for r in results
+        ),
+        "legitimate_count": sum(
+            r["predicted_class"] == 0 for r in results
+        ),
         "results": results,
         "notice": (
             "Predictions are model estimates, not proof of fraud. "

@@ -19,6 +19,7 @@ data/processed/
 models/*.pkl
 models/*.joblib
 !models/random_forest_model.pkl
+!models/random_forest_candidate.pkl
 
 # Local editor files
 .vscode/
