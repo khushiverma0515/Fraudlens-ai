@@ -24,6 +24,16 @@ main{flex:1;min-width:0;padding:29px 34px 40px}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:27px}
 .eyebrow{font-size:11px;letter-spacing:2px;color:var(--soil);text-transform:uppercase}
 .profile{font-size:13px;color:var(--soil)}
+.back-button{border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--soil);padding:9px 13px;font-size:13px;display:none}
+.back-button:hover{background:var(--blue)}
+.topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.guidance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.guidance-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px}
+.guidance-card h3{margin-bottom:10px}
+.guidance-card p,.guidance-card li{font-size:13px;line-height:1.7;color:var(--soil)}
+.guidance-card ul,.guidance-card ol{padding-left:20px}
+.guidance-warning{background:#F3DCDD;border-left:4px solid var(--red);padding:16px 18px;border-radius:8px;line-height:1.7;font-size:13px}
+.guidance-note{background:#DCEBDD;border-left:4px solid #527A5B;padding:16px 18px;border-radius:8px;line-height:1.7;font-size:13px}
 .hero{display:grid;grid-template-columns:1.5fr .8fr;gap:24px;align-items:center;margin-bottom:28px}
 h1{font:56px/1.05 Georgia,serif;letter-spacing:-2px;margin:10px 0}
 .hero p{color:var(--soil);line-height:1.7;max-width:520px}
@@ -110,6 +120,8 @@ main{padding:24px 20px}
 .brand{font-size:25px}
 .tagline{margin-bottom:18px}
 .nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+.guidance-grid{grid-template-columns:1fr}
+.topbar{align-items:flex-start}
 .nav button{padding:10px;font-size:12px}
 .side-bottom{display:none}
 main{padding:22px 15px}
@@ -135,13 +147,17 @@ h1{font-size:42px}
     <button data-view="investigator"><span>✳</span> AI Investigator</button>
     <button data-view="knowledge"><span>▧</span> RAG Knowledge Base</button>
     <button data-view="reports"><span>▥</span> Reports</button>
+    <button data-view="guidance"><span>ⓘ</span> Guidance</button>
   </nav>
   <div class="side-bottom">Smarter insights.<br>Safer transactions.<br><br>────────</div>
 </aside>
 
 <main>
   <div class="topbar">
-    <div class="eyebrow">Financial intelligence workspace</div>
+    <div class="topbar-left">
+      <button class="back-button" id="back-button" type="button" aria-label="Go back">← Back</button>
+      <div class="eyebrow">Financial intelligence workspace</div>
+    </div>
     <div class="profile">◉ &nbsp; Fraud Intelligence Workspace</div>
   </div>
 
@@ -319,12 +335,84 @@ h1{font-size:42px}
     </div>
   </section>
 
+  <section class="view" id="guidance">
+    <div class="section-title">
+      <div class="eyebrow">Help and instructions</div>
+      <h1>FraudLens Guidance</h1>
+      <p>A practical guide to using the current FraudLens AI prototype safely and correctly.</p>
+    </div>
+
+    <div class="guidance-warning">
+      <strong>Important — know what the current model supports.</strong><br>
+      The currently deployed model was trained on a credit-card dataset with the fields
+      <strong>Time, V1–V28 and Amount</strong>. It does not understand ordinary Indian bank
+      statement columns such as Date, Description, Debit, Credit or Balance. Do not rename
+      bank statement columns to make them appear compatible. That would not create valid model features.
+    </div>
+
+    <div class="guidance-grid" style="margin-top:16px">
+      <div class="guidance-card">
+        <h3>1. How to analyze a file</h3>
+        <ol>
+          <li>Open <strong>Transaction Analysis</strong>.</li>
+          <li>Select a CSV or XLSX file that genuinely contains the model's required feature columns.</li>
+          <li>Check the selected filename, then choose <strong>Analyze file</strong>.</li>
+          <li>Wait for the backend response and review the returned rows and summary.</li>
+          <li>Use <strong>Download results CSV</strong> to save the returned predictions.</li>
+        </ol>
+      </div>
+
+      <div class="guidance-card">
+        <h3>2. Current upload requirements</h3>
+        <ul>
+          <li>Accepted formats: <strong>.csv</strong> and <strong>.xlsx</strong>.</li>
+          <li>Maximum file size: <strong>5 MB</strong>.</li>
+          <li>Backend row limit: <strong>10,000 rows</strong>.</li>
+          <li>Required model inputs: <strong>Time, V1, V2, …, V28, Amount</strong>.</li>
+          <li>PDF statements are <strong>not supported</strong> by the current upload pipeline.</li>
+        </ul>
+      </div>
+
+      <div class="guidance-card">
+        <h3>3. Understanding the results</h3>
+        <ul>
+          <li><strong>Fraud</strong> and <strong>Legitimate</strong> are model predictions, not confirmed outcomes.</li>
+          <li>A flagged row should be reviewed with its surrounding transaction context.</li>
+          <li>Do not block an account, accuse a customer, or make a financial decision from this result alone.</li>
+          <li>The dashboard summary reflects the latest file analyzed in this browser session.</li>
+        </ul>
+      </div>
+
+      <div class="guidance-card">
+        <h3>4. Other sections</h3>
+        <ul>
+          <li><strong>Dashboard:</strong> shows the latest analysis summary and quick navigation. Its chart is illustrative.</li>
+          <li><strong>AI Investigator:</strong> displays a summary of the latest model output for further review.</li>
+          <li><strong>RAG Knowledge Base:</strong> currently contains static reference guidance; it is not live document retrieval.</li>
+          <li><strong>Reports:</strong> lists files analyzed during the current browser session only.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guidance-note" style="margin-top:16px">
+      <strong>Development roadmap:</strong> Support for ordinary Indian bank statements in CSV, Excel
+      and PDF (including scanned PDFs), bank/layout detection, transaction-field mapping and a
+      suitable bank-transaction risk model is planned work. Those capabilities are not available
+      in the current deployed version yet.
+    </div>
+
+    <div class="guidance-warning" style="margin-top:16px">
+      <strong>Privacy and testing:</strong> Use synthetic or non-sensitive sample data while testing.
+      Do not upload real bank statements, account numbers, card numbers, personal identifiers or
+      other confidential financial information to this prototype.
+    </div>
+  </section>
+
   <div class="footer">FraudLens AI · Transaction analysis</div>
 </main>
 </div>
 
 <script>
-// Local development API. For a deployed site, change this to your public backend URL.
 const API_URL = "https://fraudlens-ai-hea4.onrender.com/api/analyze-file";
 
 let selectedFile = null;
@@ -333,11 +421,33 @@ let historyItems = [];
 
 const navButtons = document.querySelectorAll("[data-view]");
 const views = document.querySelectorAll(".view");
+const backButton = document.getElementById("back-button");
+const viewHistory = [];
 
-function showView(viewId) {
+function showView(viewId, addToHistory = true) {
+  const targetView = document.getElementById(viewId);
+  if (!targetView) return;
+
+  const currentView = document.querySelector(".view.active");
+
+  if (addToHistory && currentView && currentView.id !== viewId) {
+    viewHistory.push(currentView.id);
+  }
+
   views.forEach(view => view.classList.toggle("active", view.id === viewId));
   navButtons.forEach(button => button.classList.toggle("active", button.dataset.view === viewId));
+
+  backButton.style.display = viewId === "dashboard" ? "none" : "inline-flex";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+function goBack() {
+  const previousView = viewHistory.pop() || "dashboard";
+  showView(previousView, false);
+}
+
+backButton.addEventListener("click", goBack);
 
 navButtons.forEach(button => {
   button.addEventListener("click", () => showView(button.dataset.view));
@@ -438,7 +548,6 @@ function normalizePredictionValue(raw) {
   return "Uncertain";
 }
 
-// Normalize every result so the dashboard and table use the same prediction.
 function normalizeResults(data) {
   let rows = Array.isArray(data)
     ? data
@@ -467,8 +576,6 @@ function normalizeResults(data) {
 
     if (probability !== null && probability >= 0 && probability <= 100) {
       row.fraud_probability = Number(probability.toFixed(2));
-
-      // Keep prediction, class, and risk consistent with the probability.
       row.prediction = probability >= 50 ? "Fraud" : "Legitimate";
       row.predicted_class = probability >= 50 ? 1 : 0;
       row.risk_level =
@@ -507,7 +614,6 @@ function normalizeResults(data) {
 }
 
 function predictionOf(row) {
-  // Use the normalized prediction, not a stale raw class field.
   return normalizePredictionValue(row.prediction);
 }
 
@@ -521,8 +627,6 @@ function money(value) {
 function renderResults(data, rows) {
   latestRows = rows;
 
-  // All dashboard counts are calculated from the exact normalized rows
-  // displayed in the results table.
   const fraud = rows.filter(row => predictionOf(row) === "Fraud").length;
   const legit = rows.filter(row => predictionOf(row) === "Legitimate").length;
 
